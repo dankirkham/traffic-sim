@@ -22,4 +22,12 @@ export default class Point {
   print() {
     console.log('Point: (' + this.x + ', ' + this.y + ')');
   }
+
+  setX(x: number) {
+    this.x = x;
+  }
+
+  setY(y: number) {
+    this.y = y;
+  }
 }

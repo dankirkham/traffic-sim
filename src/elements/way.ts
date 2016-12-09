@@ -101,4 +101,38 @@ export default class Way {
   //
   //   return distance;
   // }
+
+  isIntersecting (that: Way): boolean {
+    // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
+
+    let p0: Point = this.getIntersection(0).getLocation();
+    let p1: Point = this.getIntersection(1).getLocation();
+    let p2: Point = that.getIntersection(0).getLocation();
+    let p3: Point = that.getIntersection(1).getLocation();
+
+    let s1: Point = new Point(p1.getX() - p0.getX(),
+                              p1.getY() - p0.getY());
+    let s2: Point = new Point(p3.getX() - p2.getX(),
+                              p3.getY() - p2.getY());
+
+    let s: number;
+    let t: number;
+    s = (-s1.getY() * (p0.getX() - p2.getX()) + s1.getX() * (p0.getY() - p2.getY())) / (-s2.getX() * s1.getY() + s1.getX() * s2.getY());
+    t = ( s2.getX() * (p0.getY() - p2.getY()) - s2.getY() * (p0.getX() - p2.getX())) / (-s2.getX() * s1.getY() + s1.getX() * s2.getY());
+
+    if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+    {
+        // Collision detected
+
+        // Intersection Point
+        // if (i_x != NULL)
+        //     *i_x = p0.getX() + (t * s1.getX());
+        // if (i_y != NULL)
+        //     *i_y = p0.getY() + (t * s1.getY());
+
+        return true;
+    }
+
+    return false; // No collision
+  }
 }
