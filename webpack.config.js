@@ -1,3 +1,5 @@
+var webpack = require("webpack");
+
 module.exports = {
   entry: './src/app.ts',
   output: {
@@ -10,5 +12,8 @@ module.exports = {
     loaders: [
       { test: /\.ts$/, loader: 'ts-loader' }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({minimize: true})
+  ]
 }
