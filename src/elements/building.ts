@@ -10,7 +10,7 @@ export default class Building {
   // This works as the physical address of the building
   // 0 = at intersection0
   // 1 = at intersection1
-  // 0.5 = halway between two intersections
+  // 0.5 = halfway between two intersections
   distance: number;
 
   constructor(location: Point, way: Way, distance: number) {
