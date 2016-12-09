@@ -10,28 +10,11 @@ import MapGenerator from "./mapGenerator";
 import MapGeneratorConfig from "./mapGeneratorConfig";
 
 export default class WebMapGenerator extends MapGenerator {
-  private static getIntersectionWays(intersection: Intersection, ways: Way[]): Way[] {
-    let intersectionWays: Way[] = [];
-
-    for (let way of ways) {
-      if (way.getIntersection(0) == intersection || way.getIntersection(1) == intersection) {
-        intersectionWays.push(way);
-      }
-    }
-
-    return intersectionWays;
-  }
-
-  private static wayExists(way: Way, ways: Way[]): boolean {
-    for (let w of ways) {
-      if ((w.getIntersection(0) == way.getIntersection(0) && w.getIntersection(1) == way.getIntersection(1)) ||
-          (w.getIntersection(1) == way.getIntersection(1) && w.getIntersection(0) == way.getIntersection(0))) {
-        return true;
-      }
-    }
-
-    return false;
-  }
+  // private static findGroups(intersections: Intersection[], ways: Way[]): Intersection[][] {
+  //   let groups: Intersection[][] = [];
+  //
+  //
+  // }
 
   private static wayIntersects(way: Way, ways: Way[]): boolean {
     for (let w of ways) {
@@ -75,7 +58,7 @@ export default class WebMapGenerator extends MapGenerator {
     while (closestIntersections.length < count && i < intersectionDistances.length) {
       let way: Way = new Way(intersection, intersectionDistances[i] as Intersection);
 
-      if (!this.wayExists(way, ways) && !this.wayIntersects(way, ways)) {
+      if (!intersection.isConnectedTo(intersectionDistances[i]) && !this.wayIntersects(way, ways)) {
         closestIntersections.push(intersectionDistances[i]);
       }
 
@@ -100,7 +83,7 @@ export default class WebMapGenerator extends MapGenerator {
 
     // Generate ways for each intersection
     for (let intersection of intersections) {
-      let intersectionWays: Way[] = this.getIntersectionWays(intersection, ways);
+      let intersectionWays: Way[] = intersection.getWays();
 
       let destinationIntersections = this.getClosestIntersections(intersection, intersections, config.minWaysPerIntersection - intersectionWays.length, ways);
 

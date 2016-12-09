@@ -106,4 +106,8 @@ export default class Way {
       building.setWay(this);
     }
   }
+
+  isConnectedTo(intersection: Intersection) {
+    return intersection == this.getIntersection(0) || intersection == this.getIntersection(1);
+  }
 }

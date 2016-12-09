@@ -25,4 +25,14 @@ export default class Intersection {
   getWays(): Way[] {
     return this.ways;
   }
+
+  isConnectedTo(intersection: Intersection) {
+    for (var way of this.ways) {
+      if (way.isConnectedTo(intersection)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }
