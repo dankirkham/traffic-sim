@@ -2,8 +2,8 @@ import Point from "../elements/point"
 import Way from "../elements/way";
 
 export default class Building {
-  location: Point;
-  way: Way;
+  protected location: Point;
+  protected way: Way;
 
   // Distance between way intersection0 and intersection1.
   // This is the closest point on the way to the building.
@@ -15,11 +15,19 @@ export default class Building {
 
   constructor(location: Point, way: Way, distance: number) {
     this.location = location;
-    this.way = way;
     this.distance = distance;
+
+    this.setWay(way);
   }
 
   getLocation(): Point {
     return this.location;
+  }
+
+  setWay(way: Way) {
+    this.way = way;
+
+    if (way)
+      way.addBuilding(this);
   }
 }
