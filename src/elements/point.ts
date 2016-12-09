@@ -19,8 +19,8 @@ export default class Point {
     return Math.sqrt(Math.pow(this.getX() - that.getX(), 2) + Math.pow(this.getY() - that.getY(), 2));
   }
 
-  print() {
-    console.log('Point: (' + this.x + ', ' + this.y + ')');
+  getString(): string {
+    return '(' + this.x + ', ' + this.y + ')';
   }
 
   setX(x: number) {
