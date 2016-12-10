@@ -26,9 +26,9 @@ export default class Intersection {
     return this.ways;
   }
 
-  isConnectedTo(intersection: Intersection) {
+  isConnectedToIntersection(intersection: Intersection) {
     for (var way of this.ways) {
-      if (way.isConnectedTo(intersection)) {
+      if (way.isConnectedToIntersection(intersection)) {
         return true;
       }
     }

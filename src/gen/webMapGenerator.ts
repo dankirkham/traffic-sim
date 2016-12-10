@@ -19,13 +19,9 @@ export default class WebMapGenerator extends MapGenerator {
   private static wayIntersects(way: Way, ways: Way[]): boolean {
     for (let w of ways) {
       if (w.isIntersecting(way)) {
-
         // If the ways share endpoints, they are technically intersecting,
         // but we make an exception here and say that they aren't.
-        if (!(way.getIntersection(0) == w.getIntersection(0) ||
-              way.getIntersection(0) == w.getIntersection(1) ||
-              way.getIntersection(1) == w.getIntersection(0) ||
-              way.getIntersection(1) == w.getIntersection(1))) {
+        if (!way.isConnectedToWay(w)) {
           return true;
         }
       }
@@ -58,7 +54,7 @@ export default class WebMapGenerator extends MapGenerator {
     while (closestIntersections.length < count && i < intersectionDistances.length) {
       let way: Way = new Way(intersection, intersectionDistances[i] as Intersection);
 
-      if (!intersection.isConnectedTo(intersectionDistances[i]) && !this.wayIntersects(way, ways)) {
+      if (!intersection.isConnectedToIntersection(intersectionDistances[i]) && !this.wayIntersects(way, ways)) {
         closestIntersections.push(intersectionDistances[i]);
       }
 

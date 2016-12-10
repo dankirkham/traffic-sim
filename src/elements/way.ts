@@ -107,7 +107,14 @@ export default class Way {
     }
   }
 
-  isConnectedTo(intersection: Intersection) {
+  isConnectedToIntersection(intersection: Intersection) {
     return intersection == this.getIntersection(0) || intersection == this.getIntersection(1);
+  }
+
+  isConnectedToWay(that: Way) {
+    return this.getIntersection(0) == that.getIntersection(0) ||
+           this.getIntersection(0) == that.getIntersection(1) ||
+           this.getIntersection(1) == that.getIntersection(0) ||
+           this.getIntersection(1) == that.getIntersection(1);
   }
 }
