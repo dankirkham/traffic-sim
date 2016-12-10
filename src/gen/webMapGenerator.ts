@@ -64,17 +64,32 @@ export default class WebMapGenerator extends MapGenerator {
     return closestIntersections;
   }
 
+  private static isIsolated(point: Point, intersections: Intersection[], config: MapGeneratorConfig): boolean {
+    for (let intersection of intersections) {
+      if (intersection.getLocation().getDistance(point) < config.intersectionMinDistance) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   static generate(config: MapGeneratorConfig) {
     let intersections: Intersection[] = [];
     let ways: Way[] = [];
 
     // Generate intersections
-    for (let i = 1; i <= config.intersectionCount; i++) {
+    let i: number = 1;
+    while (i <= config.intersectionCount) {
       let location: Point = super.randomPoint(config.height, config.width);
 
-      let intersection: Intersection = new Intersection(location);
-
-      intersections.push(intersection);
+      // Make sure Point is not too close to another intersection
+      if (this.isIsolated(location, intersections, config)) {
+        // Save intersection
+        let intersection: Intersection = new Intersection(location);
+        intersections.push(intersection);
+        i += 1;
+      }
     }
 
     // Generate ways for each intersection

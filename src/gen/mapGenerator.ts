@@ -53,7 +53,6 @@ export default class MapGenerator {
 
     // Find address
     let address: number = closestWay.getAddress(location);
-    console.log(address);
 
     // Save building
     let building: Building = new Building(location, closestWay, address);

@@ -27,8 +27,8 @@ export default class MapGeneratorConfig {
   // Minimum number of roads that must meet an intersection. (Unless there aren't any possible options)
   minWaysPerIntersection: number = 3;
 
-  // TODO: An Intersection must be this far away from another intersection.
-  intersectionMinDistance: number = 10;
+  // An Intersection must be this far away from another intersection.
+  intersectionMinDistance: number = 50;
 
   // TODO: Forces ways meeting and intersection to be a certain angle apart.
   forceAngleSeparation: boolean = true;
