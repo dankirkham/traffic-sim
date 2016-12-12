@@ -12,12 +12,13 @@ export default class MapGeneratorConfig {
 
   // BEGIN - Building options
   // Defines the distance a building can be from another object
+  mapEdgeDistance: number = 25;
   intersectionDistance: number = 25;
   buildingDistance: number = 25;
   wayMaxDistance: number = 20;
   wayMinDistance: number = 12;
   // Number of buildings that will be generated
-  buildingCount: number = 500;
+  buildingCount: number = 400;
   // END - Bulding options
 
   // BEGIN - WebMapGenerator Options

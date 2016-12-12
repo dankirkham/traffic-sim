@@ -14,6 +14,13 @@ export default class MapGenerator {
   }
 
   static testLocation(map: Map, location: Point, config: MapGeneratorConfig): boolean {
+    // Not too close to map edge
+    if (location.getX() < config.mapEdgeDistance ||
+        location.getX() > config.width - config.mapEdgeDistance ||
+        location.getY() < config.mapEdgeDistance ||
+        location.getY() > config.height - config.mapEdgeDistance)
+      return false;
+
     // Check all intersections for distance
     for (let intersection of map.getIntersections()) {
       let distance: number = location.getDistance(intersection.getLocation());
@@ -56,6 +63,7 @@ export default class MapGenerator {
 
     // Save building
     let building: Building = new Building(location, closestWay, address);
+    building.link();
     map.addBuilding(building);
 
     return true;
