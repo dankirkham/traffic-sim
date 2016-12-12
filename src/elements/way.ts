@@ -15,14 +15,8 @@ export default class Way {
   }
 
   setIntersection(index: number, intersection: Intersection) {
-    if (index == 0 || index == 1) {
-      if (this.intersections[index] != intersection) {
-        this.intersections[index] = intersection;
-
-        if (intersection)
-          intersection.addWay(this);
-      }
-    }
+    if (index == 0 || index == 1)
+      this.intersections[index] = intersection;
   }
 
   getIntersection(index: number): Intersection {
@@ -77,7 +71,7 @@ export default class Way {
     return this.dist2(v, pointOnWay) / this.dist2(v, w);
   }
 
-  isIntersecting (that: Way): boolean {
+  isIntersectingWay (that: Way): boolean {
     // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
     let p0: Point = this.getIntersection(0).getLocation();
     let p1: Point = this.getIntersection(1).getLocation();
@@ -93,28 +87,54 @@ export default class Way {
     return s >= 0 && s <= 1 && t >= 0 && t <= 1;
   }
 
+  isIntersectingWays (ways: Way[]): boolean {
+    for (let that of ways) {
+      if (this.isIntersectingWay(that)) {
+        // If the ways share endpoints, they are technically intersecting,
+        // but we make an exception here and say that they aren't.
+        if (!this.isConnectedToWay(that)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   getBuildings(): Building[] {
     return this.buildings;
   }
 
   addBuilding(building: Building) {
-    if (building && this.buildings.indexOf(building) > -1) {
+    if (building && this.buildings.indexOf(building) == -1) {
       this.buildings.push(building);
 
       // TODO: Sort buildings by distance.
-
-      building.setWay(this);
     }
   }
 
   isConnectedToIntersection(intersection: Intersection) {
-    return intersection == this.getIntersection(0) || intersection == this.getIntersection(1);
+    return (this.getIntersection(0) && intersection == this.getIntersection(0)) ||
+           (this.getIntersection(1) && intersection == this.getIntersection(1));
   }
 
   isConnectedToWay(that: Way) {
+    if (!that.getIntersection(0) || !that.getIntersection(1)) {
+      console.log('intersections undefined');
+    }
+    
     return this.getIntersection(0) == that.getIntersection(0) ||
            this.getIntersection(0) == that.getIntersection(1) ||
            this.getIntersection(1) == that.getIntersection(0) ||
            this.getIntersection(1) == that.getIntersection(1);
+  }
+
+  link() {
+    for (let building of this.buildings) {
+      building.setWay(this);
+    }
+
+    this.getIntersection(0).addWay(this);
+    this.getIntersection(1).addWay(this);
   }
 }

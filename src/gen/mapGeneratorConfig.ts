@@ -17,15 +17,18 @@ export default class MapGeneratorConfig {
   wayMaxDistance: number = 20;
   wayMinDistance: number = 12;
   // Number of buildings that will be generated
-  buildingCount: number = 100;
+  buildingCount: number = 1;
   // END - Bulding options
 
   // BEGIN - WebMapGenerator Options
   // Number of intersections that will be generated.
-  intersectionCount: number = 180;
+  intersectionCount: number = 250;
 
   // Minimum number of roads that must meet an intersection. (Unless there aren't any possible options)
   minWaysPerIntersection: number = 3;
+
+  // Absolute maximum ways per intersection
+  maxWaysPerIntersection: number = 4;
 
   // An Intersection must be this far away from another intersection.
   intersectionMinDistance: number = 50;

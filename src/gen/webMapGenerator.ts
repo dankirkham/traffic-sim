@@ -16,20 +16,7 @@ export default class WebMapGenerator extends MapGenerator {
   //
   // }
 
-  private static wayIntersects(way: Way, ways: Way[]): boolean {
-    for (let w of ways) {
-      if (w.isIntersecting(way)) {
-        // If the ways share endpoints, they are technically intersecting,
-        // but we make an exception here and say that they aren't.
-        if (!way.isConnectedToWay(w)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private static getClosestIntersections(intersection: Intersection, intersections: Intersection[], count: number, ways: Way[]): Intersection[] {
+  private static getClosestValidIntersection(intersection: Intersection, intersections: Intersection[], ways: Way[], config: MapGeneratorConfig): Intersection {
     let intersectionDistances: IntersectionDistance[] = <IntersectionDistance[]> intersections;
 
     // Calculate distance of each intersection
@@ -38,30 +25,31 @@ export default class WebMapGenerator extends MapGenerator {
     }
 
     // Sort them by distance
-    intersectionDistances = intersectionDistances.sort(function (a, b) {
-      if (a.distance > b.distance) {
-        return 1;
-      } else if (a.distance < b.distance) {
-        return -1
-      } else {
-        return 0;
-      }
-    });
+    intersectionDistances = intersectionDistances.sort(IntersectionDistance.compareDistance);
 
-    // Find n closest intersections that aren't already connected. n = count
-    let closestIntersections: Intersection[] = [];
-    let i: number = 1;
-    while (closestIntersections.length < count && i < intersectionDistances.length) {
+    // Find closet intersection that is not already connected
+    for (let i: number = 1; i < intersectionDistances.length; i++) {
+      let intersectionDistance: IntersectionDistance = intersectionDistances[i];
+
       let way: Way = new Way(intersection, intersectionDistances[i] as Intersection);
 
-      if (!intersection.isConnectedToIntersection(intersectionDistances[i]) && !this.wayIntersects(way, ways)) {
-        closestIntersections.push(intersectionDistances[i]);
-      }
+      if (intersectionDistance.getWays().length >= config.maxWaysPerIntersection)
+        // Intersection has too many ways.
+        continue;
 
-      i += 1;
+      if (intersection.isConnectedToIntersection(intersectionDistance))
+        // Intersection is already connected
+        continue;
+
+      if (way.isIntersectingWays(ways))
+        // New way would intersect an old way.
+        continue;
+
+      // Intersection would result in a valid way. Return it.
+      return intersectionDistances[i]
     }
 
-    return closestIntersections;
+    return null;
   }
 
   private static isIsolated(point: Point, intersections: Intersection[], config: MapGeneratorConfig): boolean {
@@ -96,12 +84,16 @@ export default class WebMapGenerator extends MapGenerator {
     for (let intersection of intersections) {
       let intersectionWays: Way[] = intersection.getWays();
 
-      let destinationIntersections = this.getClosestIntersections(intersection, intersections, config.minWaysPerIntersection - intersectionWays.length, ways);
+      while (intersectionWays.length < config.maxWaysPerIntersection) {
+        let closetIntersection: Intersection = this.getClosestValidIntersection(intersection, intersections, ways, config);
 
-      for (let destinationIntersection of destinationIntersections) {
-        let way: Way = new Way(intersection, destinationIntersection);
-
-        ways.push(way);
+        if (closetIntersection) {
+          let way: Way = new Way(intersection, closetIntersection);
+          way.link();
+          ways.push(way);
+        } else {
+          break;
+        }
       }
     }
 

@@ -26,8 +26,10 @@ export default class Building {
 
   setWay(way: Way) {
     this.way = way;
+  }
 
-    if (way)
-      way.addBuilding(this);
+  link() {
+    if (this.way)
+      this.way.addBuilding(this);
   }
 }

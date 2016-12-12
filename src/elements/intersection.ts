@@ -15,7 +15,7 @@ export default class Intersection {
   }
 
   addWay(way: Way) {
-    if (way && this.ways.indexOf(way) > -1) {
+    if (way && this.ways.indexOf(way) == -1) {
       this.ways.push(way);
 
       // TODO: Sort ways by heading.

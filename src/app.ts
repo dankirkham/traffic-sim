@@ -1,18 +1,20 @@
+import Map from "./elements/map"
+import Way from "./elements/way"
 import GridMapGenerator from "./gen/gridMapGenerator";
 import WebMapGenerator from "./gen/webMapGenerator";
 import * as graphics from "./graphics";
 import MapGeneratorConfig from "./gen/mapGeneratorConfig"
 
-var canvas = <HTMLCanvasElement> document.getElementById("mainCanvas");
+let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var context = canvas.getContext("2d");
+let context: CanvasRenderingContext2D = canvas.getContext("2d");
 
-var config = new MapGeneratorConfig();
+let config: MapGeneratorConfig = new MapGeneratorConfig();
 
-//var map = WebMapGenerator.generate(config);
-var map = GridMapGenerator.generate(config);
+let map: Map = WebMapGenerator.generate(config);
+// let map: Map = GridMapGenerator.generate(config);
 
 graphics.draw(context, map, 1);
