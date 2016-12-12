@@ -11,7 +11,7 @@ export default class Building {
   // 0 = at intersection0
   // 1 = at intersection1
   // 0.5 = halfway between two intersections
-  distance: number;
+  protected distance: number;
 
   constructor(location: Point, way: Way, distance: number) {
     this.location = location;
@@ -26,6 +26,14 @@ export default class Building {
 
   setWay(way: Way) {
     this.way = way;
+  }
+
+  getWay(): Way {
+    return this.way;
+  }
+
+  getDistance(): number {
+    return this.distance;
   }
 
   link() {

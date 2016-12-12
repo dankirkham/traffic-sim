@@ -68,7 +68,14 @@ export default class Way {
 
     let pointOnWay: Point = new Point(v.getX() + t * (w.getX() - v.getX()), v.getY() + t * (w.getY() - v.getY()));
 
-    return this.dist2(v, pointOnWay) / this.dist2(v, w);
+    return v.getDistance(pointOnWay) / v.getDistance(w);
+  }
+
+  getLocationOfAddress(address: number): Point {
+    let v: Point = this.getIntersection(0).getLocation();
+    let w: Point = this.getIntersection(1).getLocation();
+
+    return w.subtract(v).scalarMultiply(address).add(v);
   }
 
   getCommonIntersection(that: Way): Intersection {
@@ -93,6 +100,12 @@ export default class Way {
     }
   }
 
+  getHeading(): number {
+    let vector = this.getIntersection(1).getLocation().subtract(this.getIntersection(0).getLocation());
+
+    return Math.atan(vector.getX() / vector.getY()) * (180 / Math.PI);
+  }
+
   getAngleBetweenWay(that: Way): number {
     let commonIntersection: Intersection = this.getCommonIntersection(that);
 
@@ -111,7 +124,7 @@ export default class Way {
 
     for (let way of ways) {
       let angle: number = this.getAngleBetweenWay(way);
-      
+
       if (minimum > angle) {
         minimum = angle;
       }

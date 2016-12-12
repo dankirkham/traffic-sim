@@ -31,6 +31,10 @@ export default class Point {
     this.y = y;
   }
 
+  add(that: Point): Point {
+    return new Point(this.getX() + that.getX(), this.getY() + that.getY());
+  }
+
   subtract(that: Point): Point {
     return new Point(this.getX() - that.getX(), this.getY() - that.getY());
   }
@@ -41,5 +45,9 @@ export default class Point {
 
   magnitude(): number {
     return Math.sqrt(Math.pow(this.getX(), 2) + Math.pow(this.getY(), 2));
+  }
+
+  scalarMultiply(scalar: number) {
+    return new Point(this.getX() * scalar, this.getY() * scalar);
   }
 }

@@ -44,13 +44,43 @@ function drawIntersections(context: CanvasRenderingContext2D, intersections: Int
 function drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], scale: number) {
   let BOX_SIZE: number = 20;
 
+  let id = context.createImageData(1, 1);
+  let d = id.data;
+  d[0] = 255;
+  d[1] = 255;
+  d[3] = 255;
+
   for (let building of buildings) {
     let location: Point = building.getLocation();
 
-    context.fillRect((location.getX() - BOX_SIZE / 2) * scale,
-                     (location.getY() - BOX_SIZE / 2) * scale,
+    context.save();
+
+    context.beginPath();
+
+    context.translate(location.getX() * scale, location.getY() * scale,);
+
+    context.rotate(-building.getWay().getHeading() * Math.PI / 180);
+
+    context.fillRect(-BOX_SIZE / 2 * scale,
+                     -BOX_SIZE / 2 * scale,
                      BOX_SIZE * scale,
                      BOX_SIZE * scale);
+
+    context.restore();
+
+    // Draw address
+    let addressLocation: Point = building.getWay().getLocationOfAddress(building.getDistance());
+
+    let x: number = addressLocation.getX();
+    let y: number = addressLocation.getY();
+
+    context.putImageData(id, x * scale, y * scale);
+
+    context.putImageData(id, x * scale + 1, y * scale);
+    context.putImageData(id, x * scale - 1, y * scale);
+
+    context.putImageData(id, x * scale, y * scale + 1);
+    context.putImageData(id, x * scale, y * scale - 1);
   }
 }
 
