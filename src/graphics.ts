@@ -15,6 +15,8 @@ function drawWays(context: CanvasRenderingContext2D, ways: Way[], scale: number)
     context.lineTo(point1.getX() * scale, point1.getY() * scale);
     context.stroke();
   }
+
+  context.closePath();
 }
 
 function drawIntersections(context: CanvasRenderingContext2D, intersections: Intersection[], scale: number) {
