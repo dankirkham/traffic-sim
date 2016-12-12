@@ -71,7 +71,56 @@ export default class Way {
     return this.dist2(v, pointOnWay) / this.dist2(v, w);
   }
 
-  isIntersectingWay (that: Way): boolean {
+  getCommonIntersection(that: Way): Intersection {
+    if (this.getIntersection(0) == that.getIntersection(0) || this.getIntersection(0) == that.getIntersection(1)) {
+      return this.getIntersection(0);
+    } else if (this.getIntersection(1) == that.getIntersection(0) || this.getIntersection(1) == that.getIntersection(1)) {
+      return this.getIntersection(1);
+    } else {
+      console.error('Way.getCommonIntersection() error: unconnected');
+      return undefined;
+    }
+  }
+
+  getOtherIntersection(intersection: Intersection) {
+    if (this.getIntersection(0) == intersection) {
+      return this.getIntersection(1);
+    } else if (this.getIntersection(1) == intersection) {
+      return this.getIntersection(0);
+    } else {
+      console.error('Way.getOtherIntersection() error: unconnected');
+      return undefined;
+    }
+  }
+
+  getAngleBetweenWay(that: Way): number {
+    let commonIntersection: Intersection = this.getCommonIntersection(that);
+
+    let thisDestination: Point = this.getOtherIntersection(commonIntersection).getLocation();
+    let thatDestination: Point = that.getOtherIntersection(commonIntersection).getLocation();
+    let source: Point = commonIntersection.getLocation();
+
+    let thisVector: Point = source.subtract(thisDestination);
+    let thatVector: Point = source.subtract(thatDestination);
+
+    return Math.acos(thisVector.dotProduct(thatVector) / thisVector.magnitude() / thatVector.magnitude()) * (180 / Math.PI);
+  }
+
+  getMinAngleBetweenWays(ways: Way[]): number {
+    let minimum: number = 180.0;
+
+    for (let way of ways) {
+      let angle: number = this.getAngleBetweenWay(way);
+      
+      if (minimum > angle) {
+        minimum = angle;
+      }
+    }
+
+    return minimum;
+  }
+
+  isIntersectingWay(that: Way): boolean {
     // http://stackoverflow.com/questions/563198/how-do-you-detect-where-two-line-segments-intersect/1968345#1968345
     let p0: Point = this.getIntersection(0).getLocation();
     let p1: Point = this.getIntersection(1).getLocation();
@@ -119,10 +168,6 @@ export default class Way {
   }
 
   isConnectedToWay(that: Way) {
-    if (!that.getIntersection(0) || !that.getIntersection(1)) {
-      console.log('intersections undefined');
-    }
-    
     return this.getIntersection(0) == that.getIntersection(0) ||
            this.getIntersection(0) == that.getIntersection(1) ||
            this.getIntersection(1) == that.getIntersection(0) ||

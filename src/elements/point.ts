@@ -30,4 +30,16 @@ export default class Point {
   setY(y: number) {
     this.y = y;
   }
+
+  subtract(that: Point): Point {
+    return new Point(this.getX() - that.getX(), this.getY() - that.getY());
+  }
+
+  dotProduct(that: Point): number {
+    return this.getX() * that.getX() + this.getY() * that.getY();
+  }
+
+  magnitude(): number {
+    return Math.sqrt(Math.pow(this.getX(), 2) + Math.pow(this.getY(), 2));
+  }
 }

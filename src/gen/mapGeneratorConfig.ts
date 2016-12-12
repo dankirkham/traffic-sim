@@ -17,7 +17,7 @@ export default class MapGeneratorConfig {
   wayMaxDistance: number = 20;
   wayMinDistance: number = 12;
   // Number of buildings that will be generated
-  buildingCount: number = 1;
+  buildingCount: number = 500;
   // END - Bulding options
 
   // BEGIN - WebMapGenerator Options
@@ -33,8 +33,8 @@ export default class MapGeneratorConfig {
   // An Intersection must be this far away from another intersection.
   intersectionMinDistance: number = 50;
 
-  // TODO: Forces ways meeting and intersection to be a certain angle apart.
-  forceAngleSeparation: boolean = true;
+  // Forces ways meeting at an intersection to be a certain angle apart.
+  wayMinAngle: number = 30;
   // END - WebMapGenerator Options
 
   // BEGIN - GridMapGenerator Options

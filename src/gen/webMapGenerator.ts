@@ -17,7 +17,7 @@ export default class WebMapGenerator extends MapGenerator {
   // }
 
   private static getClosestValidIntersection(intersection: Intersection, intersections: Intersection[], ways: Way[], config: MapGeneratorConfig): Intersection {
-    let intersectionDistances: IntersectionDistance[] = <IntersectionDistance[]> intersections;
+    let intersectionDistances: IntersectionDistance[] = <IntersectionDistance[]> intersections.slice();
 
     // Calculate distance of each intersection
     for (let intersectionDistance of intersectionDistances) {
@@ -28,28 +28,34 @@ export default class WebMapGenerator extends MapGenerator {
     intersectionDistances = intersectionDistances.sort(IntersectionDistance.compareDistance);
 
     // Find closet intersection that is not already connected
-    for (let i: number = 1; i < intersectionDistances.length; i++) {
-      let intersectionDistance: IntersectionDistance = intersectionDistances[i];
+    for (let intersectionDistance of intersectionDistances) {
+      let way: Way = new Way(intersection, intersectionDistance);
 
-      let way: Way = new Way(intersection, intersectionDistances[i] as Intersection);
-
-      if (intersectionDistance.getWays().length >= config.maxWaysPerIntersection)
+      if (intersectionDistance.getWays().length >= config.maxWaysPerIntersection ||
+          intersection.getWays().length >= config.maxWaysPerIntersection)
         // Intersection has too many ways.
         continue;
 
       if (intersection.isConnectedToIntersection(intersectionDistance))
-        // Intersection is already connected
+        // Intersection is already connected.
         continue;
+
+      if (way.getMinAngleBetweenWays(intersectionDistance.getWays()) < config.wayMinAngle ||
+          way.getMinAngleBetweenWays(intersection.getWays()) < config.wayMinAngle) {
+        // Intersection would result in a road too close in angle to another
+        // road at the same intersection.
+        continue;
+      }
 
       if (way.isIntersectingWays(ways))
         // New way would intersect an old way.
         continue;
 
       // Intersection would result in a valid way. Return it.
-      return intersectionDistances[i]
+      return intersectionDistance;
     }
 
-    return null;
+    return undefined;
   }
 
   private static isIsolated(point: Point, intersections: Intersection[], config: MapGeneratorConfig): boolean {
@@ -84,7 +90,7 @@ export default class WebMapGenerator extends MapGenerator {
     for (let intersection of intersections) {
       let intersectionWays: Way[] = intersection.getWays();
 
-      while (intersectionWays.length < config.maxWaysPerIntersection) {
+      while (intersectionWays.length < config.minWaysPerIntersection) {
         let closetIntersection: Intersection = this.getClosestValidIntersection(intersection, intersections, ways, config);
 
         if (closetIntersection) {
