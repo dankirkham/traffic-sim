@@ -170,8 +170,8 @@ export default class WebGLGraphics {
     // let origin: Vector = new Vector(camera.getOrigin().getX(), camera.getOrigin().getY(), 0, 1);
     let origin: Vector = new Vector(0, 0, 0, 1);
 
-    // let up: Vector = new Vector(0, 0, 1, 1);
-    let up: Vector = camera.getUp();
+    let up: Vector = new Vector(0, 0, 1, 1);
+    // let up: Vector = camera.getUp();
 
     let matrix: Matrix = Matrix.makeLookAt(camera.getPosition(), origin, up);
     // let matrix: Matrix = Matrix.makeLookAt(origin, camera.getPosition(), up);

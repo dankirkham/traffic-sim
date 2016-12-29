@@ -79,7 +79,7 @@ export default class Camera {
       // Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.sin(this.getAzimuth() * Math.PI / 180) + this.getOrigin().getY(),
       Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.cos(this.getAzimuth() * Math.PI / 180),
       Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.sin(this.getAzimuth() * Math.PI / 180),
-      Math.sin(this.getElevation() * Math.PI / 180) * this.getRange(),
+      -Math.sin(this.getElevation() * Math.PI / 180) * this.getRange(),
       1.0
     );
   }
