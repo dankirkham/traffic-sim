@@ -83,30 +83,33 @@ export default class WebGLGraphics {
     let pos: Vector = camera.getPosition();
 
     let vertices: number[] = [
-      -0.5, 0.5, 0,
-      -0.5, -0.5, 0,
-      0.5, 0.5, 0,
-      0.5, -0.5, 0,
-      -0.25, 0.25, 0.5,
-      -0.25, -0.25, 0.5,
-      0.25, 0.25, 0.5,
-      0.25, -0.25, 0.5,
-      0.75, 1.25, 0.5,
-      0.75, 0.75, 0.5,
-      1.25, 1.25, 0.5,
-      1.25, 0.75, 0.5,
-      pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, 0.0,
-      pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, 0.0,
-      pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, 0.0,
-      pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, 0.0,
-      pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
-      pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
-      pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
-      pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
-      pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
-      pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
-      pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
-      pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
+      1, 0, 0.01,
+      1, 0, -0.01,
+      0, 0, 0.01,
+      0, 0, -0.01,
+
+      0.01, 1, 0,
+      -0.01, 1, 0,
+      0.01, 0, 0,
+      -0.01, 0, 0,
+
+      0.01, 0, 1,
+      -0.01, 0, 1,
+      0.01, 0, 0,
+      -0.01, 0, 0,
+
+      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, 0.0,
+      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, 0.0,
+      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, 0.0,
+      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, 0.0,
+      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
+      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
+      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
+      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
+      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
+      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
+      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
+      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
 
     ];
 
@@ -120,30 +123,30 @@ export default class WebGLGraphics {
     let vertexBuffer: WebGLBuffer = this.gl.createBuffer();
 
     let colors: number[] = [
-      0.4, 1.0, 0.2, 1.0,
-      0.4, 1.0, 0.2, 1.0,
-      0.4, 1.0, 0.2, 1.0,
-      0.4, 1.0, 0.2, 1.0,
-      0.8, 0.0, 0.0, 1.0,
-      0.8, 0.0, 0.0, 1.0,
-      0.8, 0.0, 0.0, 1.0,
-      0.8, 0.0, 0.0, 1.0,
-      0.0, 0.0, 0.8, 1.0,
-      0.0, 0.0, 0.8, 1.0,
-      0.0, 0.0, 0.8, 1.0,
-      0.0, 0.0, 0.8, 1.0,
-      0.0, 0.0, 0.0, 1.0,
-      0.0, 0.0, 0.0, 1.0,
-      0.0, 0.0, 0.0, 1.0,
-      0.0, 0.0, 0.0, 1.0,
-      0.5, 0.5, 0.0, 1.0,
-      0.5, 0.5, 0.0, 1.0,
-      0.5, 0.5, 0.0, 1.0,
-      0.5, 0.5, 0.0, 1.0,
-      0.0, 0.5, 0.5, 1.0,
-      0.0, 0.5, 0.5, 1.0,
-      0.0, 0.5, 0.5, 1.0,
-      0.0, 0.5, 0.5, 1.0,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      1, 0, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 1, 0, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      0, 0, 1, 1,
+      // 0.0, 0.0, 0.0, 1.0,
+      // 0.0, 0.0, 0.0, 1.0,
+      // 0.0, 0.0, 0.0, 1.0,
+      // 0.0, 0.0, 0.0, 1.0,
+      // 0.5, 0.5, 0.0, 1.0,
+      // 0.5, 0.5, 0.0, 1.0,
+      // 0.5, 0.5, 0.0, 1.0,
+      // 0.5, 0.5, 0.0, 1.0,
+      // 0.0, 0.5, 0.5, 1.0,
+      // 0.0, 0.5, 0.5, 1.0,
+      // 0.0, 0.5, 0.5, 1.0,
+      // 0.0, 0.5, 0.5, 1.0,
     ];
 
     // let colors: number[] = [
@@ -215,9 +218,9 @@ export default class WebGLGraphics {
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 4, 4);
     this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 8, 4);
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 12, 4);
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 16, 4);
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 20, 4);
+    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 12, 4);
+    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 16, 4);
+    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 20, 4);
   }
 
   constructor(canvas: HTMLCanvasElement) {
