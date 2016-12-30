@@ -48,7 +48,7 @@ export default class Vector {
     return product;
   }
 
-  crossProduct(that: Vector) {
+  crossProduct(that: Vector): Vector {
     // Only using 3 dimensions here...
     let product: Vector = new Vector(0, 0, 0, 1.0);
 
@@ -57,6 +57,12 @@ export default class Vector {
     product.setElement(2, this.getElement(0) * that.getElement(1) - this.getElement(1) * that.getElement(0));
 
     return product;
+  }
+
+  dotProduct(that: Vector): number {
+    return this.getElement(0) * that.getElement(0) +
+           this.getElement(1) * that.getElement(1) +
+           this.getElement(2) * that.getElement(2);
   }
 
   toUnit(): Vector {

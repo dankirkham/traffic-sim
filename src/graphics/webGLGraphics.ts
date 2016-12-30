@@ -83,10 +83,15 @@ export default class WebGLGraphics {
     let pos: Vector = camera.getPosition();
 
     let vertices: number[] = [
-      1, 0, 0.01,
-      1, 0, -0.01,
-      0, 0, 0.01,
-      0, 0, -0.01,
+      // 1, 0, 0.01,
+      // 1, 0, -0.01,
+      // 0, 0, 0.01,
+      // 0, 0, -0.01,
+
+      1, 0.01, 0,
+      1, -0.01, 0,
+      0, 0.01, 0,
+      0, -0.01, 0,
 
       0.01, 1, 0,
       -0.01, 1, 0,
@@ -171,15 +176,24 @@ export default class WebGLGraphics {
 
   private buildMVMatrix(camera: Camera): Matrix {
     // let origin: Vector = new Vector(camera.getOrigin().getX(), camera.getOrigin().getY(), 0, 1);
-    let origin: Vector = new Vector(0, 0, 0, 1);
+    // let origin: Vector = new Vector(0, 0, 0, 1);
 
-    let up: Vector = new Vector(0, 0, 1, 1);
+    // let up: Vector = new Vector(0, 0, 1, 1);
     // let up: Vector = camera.getUp();
 
-    let matrix: Matrix = Matrix.makeLookAt(camera.getPosition(), origin, up);
+    // let matrix: Matrix = Matrix.makeLookAt(camera.getPosition(), origin, up);
     // let matrix: Matrix = Matrix.makeLookAt(origin, camera.getPosition(), up);
 
-    return matrix.inverse();
+    // return matrix;
+
+    // z is up, not in/out
+    let standUpMatrix: Matrix = Matrix.rotation('x', 90);
+
+    let azimuthMatrix: Matrix = Matrix.rotation('y', camera.getAzimuth());
+
+    let elevationMatrix: Matrix = Matrix.rotation('x', camera.getElevation());
+
+    return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix);
   }
 
   private buildPMatrix(): Matrix {
@@ -198,9 +212,7 @@ export default class WebGLGraphics {
   draw(map: Map, camera: Camera) {
     this.uMVMatrix = this.buildMVMatrix(camera);
 
-    let b: Vector = new Vector(0.5, 0.5, 0.5, 1);
 
-    console.log('b -> ' + b.multiplyByMatrix(this.uMVMatrix).multiplyByMatrix(this.uPMatrix).format());
 
     this.setUniforms();
 

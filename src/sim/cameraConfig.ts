@@ -10,7 +10,7 @@ export default class CameraConfig {
   protected zoomSensitivity: number;
 
   constructor() {
-    this.minElevation = 0;
+    this.minElevation = 0.1;
     this.maxElevation = 89.9;
 
     this.minRange = 1;

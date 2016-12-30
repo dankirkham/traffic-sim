@@ -16,9 +16,9 @@ export default class Camera {
     // this.elevation = 45;
     // this.range = 750;
 
-    this.azimuth = 90;
-    this.elevation = 45;
-    this.range = 2;
+    this.azimuth = 0;
+    this.elevation = 89;
+    this.range = 0.5;
 
     this.origin = new Point(0, 0);
 
@@ -92,6 +92,8 @@ export default class Camera {
       upElevation = 180 - upElevation;
       upAzimuth = (upAzimuth + 180) % 360;
     }
+
+    console.log(upElevation);
 
     let up: Vector =  new Vector(
       Math.cos(upElevation * Math.PI / 180) * this.getRange() * Math.cos(upAzimuth * Math.PI / 180),

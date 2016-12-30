@@ -21,23 +21,31 @@ export default class Matrix {
     let x: Vector = up.crossProduct(z).toUnit();
     let y: Vector = z.crossProduct(x).toUnit();
 
+    console.log('eye = ' + eye.format());
+    console.log('center = ' + center.format());
+    console.log('up = ' + up.format());
+
+    console.log('x = ' + x.format());
+    console.log('y = ' + y.format());
+    console.log('z = ' + z.format());
+
     let rotation: Matrix = new Matrix();
 
     rotation.setElement(0, 0, x.getElement(0));
     rotation.setElement(0, 1, x.getElement(1));
     rotation.setElement(0, 2, x.getElement(2));
+    rotation.setElement(0, 3, -x.dotProduct(eye));
 
     rotation.setElement(1, 0, y.getElement(0));
     rotation.setElement(1, 1, y.getElement(1));
     rotation.setElement(1, 2, y.getElement(2));
+    rotation.setElement(1, 3, -y.dotProduct(eye));
 
     rotation.setElement(2, 0, z.getElement(0));
     rotation.setElement(2, 1, z.getElement(1));
     rotation.setElement(2, 2, z.getElement(2));
+    rotation.setElement(2, 3, -z.dotProduct(eye));
 
-    rotation.setElement(3, 0, -eye.getElement(0));
-    rotation.setElement(3, 1, -eye.getElement(1));
-    rotation.setElement(3, 2, -eye.getElement(2));
     rotation.setElement(3, 3, 1);
 
     // let translation: Matrix = Matrix.identity();
@@ -79,6 +87,29 @@ export default class Matrix {
     matrix.setElement(2, 1, b);
 
     return matrix;
+  }
+
+  static rotation(axis: string, angle: number) {
+    let rotationMatrix: Matrix = Matrix.identity();
+
+    if (axis == 'x') {
+      rotationMatrix.setElement(1, 1, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(2, 2, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(1, 2, -Math.sin(angle * Math.PI / 180));
+      rotationMatrix.setElement(2, 1, Math.sin(angle * Math.PI / 180));
+    } else if (axis == 'y') {
+      rotationMatrix.setElement(0, 0, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(2, 2, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(0, 2, -Math.sin(angle * Math.PI / 180));
+      rotationMatrix.setElement(2, 0, Math.sin(angle * Math.PI / 180));
+    } else {
+      rotationMatrix.setElement(0, 0, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(1, 1, Math.cos(angle * Math.PI / 180));
+      rotationMatrix.setElement(0, 1, Math.sin(angle * Math.PI / 180));
+      rotationMatrix.setElement(1, 0, -Math.sin(angle * Math.PI / 180));
+    }
+
+    return rotationMatrix;
   }
 
   static translation(position: Vector): Matrix {
