@@ -12,8 +12,8 @@ import CameraConfig from "./sim/cameraConfig";
 
 let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = window.innerWidth - 100;
+canvas.height = window.innerHeight - 100;
 
 let config: MapGeneratorConfig = new MapGeneratorConfig();
 
@@ -59,9 +59,20 @@ function handleMouseMove(event) {
   graphics.draw(map, camera);
 }
 
+function handleMouseWheel(event) {
+  let delta: number = -event.wheelDelta;
+
+  camera.setRange(camera.getRange() + cameraConfig.getZoomSensitivity() * delta);
+
+  graphics.draw(map, camera);
+}
+
 canvas.onmousedown = handleMouseDown;
 document.onmouseup = handleMouseUp;
 document.onmousemove = handleMouseMove;
+
+canvas.addEventListener("mousewheel", handleMouseWheel, false);
+canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false);
 
 // CanvasGraphics.draw(canvas, map, 1);
 graphics.draw(map, camera);
