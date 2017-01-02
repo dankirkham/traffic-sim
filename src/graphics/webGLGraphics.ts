@@ -175,29 +175,19 @@ export default class WebGLGraphics {
   }
 
   private buildMVMatrix(camera: Camera): Matrix {
-    // let origin: Vector = new Vector(camera.getOrigin().getX(), camera.getOrigin().getY(), 0, 1);
-    // let origin: Vector = new Vector(0, 0, 0, 1);
-
-    // let up: Vector = new Vector(0, 0, 1, 1);
-    // let up: Vector = camera.getUp();
-
-    // let matrix: Matrix = Matrix.makeLookAt(camera.getPosition(), origin, up);
-    // let matrix: Matrix = Matrix.makeLookAt(origin, camera.getPosition(), up);
-
-    // return matrix;
-
-    // z is up, not in/out
     let standUpMatrix: Matrix = Matrix.rotation('x', 90);
 
     let azimuthMatrix: Matrix = Matrix.rotation('y', camera.getAzimuth());
 
     let elevationMatrix: Matrix = Matrix.rotation('x', camera.getElevation());
 
-    return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix);
+    let cameraMatrix: Matrix = Matrix.translation(new Vector(0, 0, camera.getRange(), 1));
+
+    return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix).multiplyByMatrix(cameraMatrix);
   }
 
   private buildPMatrix(): Matrix {
-    // return Matrix.perspective(45.0, 16/9, 0.01, 50);
+    // return Matrix.perspective(80, 16/9, 0.1, 2).inverse();
     return Matrix.identity();
   }
 
@@ -211,8 +201,6 @@ export default class WebGLGraphics {
 
   draw(map: Map, camera: Camera) {
     this.uMVMatrix = this.buildMVMatrix(camera);
-
-
 
     this.setUniforms();
 

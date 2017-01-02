@@ -106,6 +106,7 @@ export default class Vector {
 
   format(): string {
     let scaledVector: Vector = this.scaleToOne();
+    // let scaledVector: Vector = this;
 
     return "[ " + scaledVector.getElement(0) + ", " + scaledVector.getElement(1) + ", " + scaledVector.getElement(2) + ", " + scaledVector.getElement(3) + " ]";
   }

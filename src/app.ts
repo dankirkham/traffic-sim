@@ -56,7 +56,7 @@ function handleMouseMove(event) {
   lastMouseX = mouseX;
   lastMouseY = mouseY;
 
-  graphics.draw(map, camera);
+  // graphics.draw(map, camera);
 }
 
 function handleMouseWheel(event) {
@@ -64,7 +64,7 @@ function handleMouseWheel(event) {
 
   camera.setRange(camera.getRange() + cameraConfig.getZoomSensitivity() * delta);
 
-  graphics.draw(map, camera);
+  // graphics.draw(map, camera);
 }
 
 canvas.onmousedown = handleMouseDown;
@@ -75,4 +75,8 @@ canvas.addEventListener("mousewheel", handleMouseWheel, false);
 canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false);
 
 // CanvasGraphics.draw(canvas, map, 1);
-graphics.draw(map, camera);
+function tick() {
+  graphics.draw(map, camera);
+}
+
+setInterval(tick, 15);

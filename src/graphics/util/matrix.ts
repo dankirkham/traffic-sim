@@ -16,51 +16,8 @@ export default class Matrix {
     return matrix;
   }
 
-  static makeLookAt(eye: Vector, center: Vector, up: Vector): Matrix {
-    let z: Vector = eye.subtract(center).toUnit();
-    let x: Vector = up.crossProduct(z).toUnit();
-    let y: Vector = z.crossProduct(x).toUnit();
-
-    console.log('eye = ' + eye.format());
-    console.log('center = ' + center.format());
-    console.log('up = ' + up.format());
-
-    console.log('x = ' + x.format());
-    console.log('y = ' + y.format());
-    console.log('z = ' + z.format());
-
-    let rotation: Matrix = new Matrix();
-
-    rotation.setElement(0, 0, x.getElement(0));
-    rotation.setElement(0, 1, x.getElement(1));
-    rotation.setElement(0, 2, x.getElement(2));
-    rotation.setElement(0, 3, -x.dotProduct(eye));
-
-    rotation.setElement(1, 0, y.getElement(0));
-    rotation.setElement(1, 1, y.getElement(1));
-    rotation.setElement(1, 2, y.getElement(2));
-    rotation.setElement(1, 3, -y.dotProduct(eye));
-
-    rotation.setElement(2, 0, z.getElement(0));
-    rotation.setElement(2, 1, z.getElement(1));
-    rotation.setElement(2, 2, z.getElement(2));
-    rotation.setElement(2, 3, -z.dotProduct(eye));
-
-    rotation.setElement(3, 3, 1);
-
-    // let translation: Matrix = Matrix.identity();
-    //
-    // translation.setElement(3, 0, -eye.getElement(0));
-    // translation.setElement(3, 1, -eye.getElement(1));
-    // translation.setElement(3, 2, -eye.getElement(2));
-    //
-    // return rotation.multiplyByMatrix(translation);
-
-    return rotation;
-  }
-
   static perspective(fovy: number, aspect: number, znear: number, zfar: number): Matrix {
-    let ymax: number = znear * Math.tan(fovy * Math.PI / 360.0); // TODO: Why 360 and not 180?
+    let ymax: number = znear * Math.tan(fovy * Math.PI / 360.0);
     let ymin: number = -ymax;
     let xmin: number = ymin * aspect;
     let xmax: number = ymax * aspect;
@@ -85,6 +42,8 @@ export default class Matrix {
     matrix.setElement(3, 2, d);
     matrix.setElement(2, 0, a);
     matrix.setElement(2, 1, b);
+
+    console.log(matrix.format())
 
     return matrix;
   }
@@ -347,47 +306,6 @@ export default class Matrix {
       return;
 
     this.elements[row][col] = val;
-  }
-
-  getSubblock(row: number, col: number): Matrix {
-    if (this.size != 4)
-      return;
-
-    if (row < 0 || row >= 2)
-      return;
-
-    if (col < 0 || col >= 2)
-      return;
-
-    let subblock: Matrix = new Matrix(2);
-
-    for (let i: number = 0; i < 2; i++) {
-      for (let j: number = 0; j < 2; j++) {
-        subblock.setElement(i, j, this.getElement(2 * row + i, 2 * col + j));
-      }
-    }
-
-    return subblock;
-  }
-
-  setSubblock(row: number, col: number, subblock: Matrix) {
-    if (this.size != 4)
-      return;
-
-    // if (subblock.getSize() != 2) // TODO
-    //   return
-
-    if (row < 0 || row >= 2)
-      return;
-
-    if (col < 0 || col >= 2)
-      return;
-
-    for (let i: number = 0; i < 2; i++) {
-      for (let j: number = 0; j < 2; j++) {
-        this.setElement(2 * row + i, 2 * col + j, subblock.getElement(i, j));
-      }
-    }
   }
 
   flatten(): number[] {
