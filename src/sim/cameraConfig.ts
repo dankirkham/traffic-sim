@@ -14,7 +14,7 @@ export default class CameraConfig {
     this.maxElevation = 89.9;
 
     this.minRange = 0.1;
-    this.maxRange = 2;
+    this.maxRange = 30;
 
     this.horizontalSensitivity = 0.4;
     this.verticalSensitivity = 0.4;

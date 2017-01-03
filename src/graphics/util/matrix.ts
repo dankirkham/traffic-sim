@@ -43,8 +43,6 @@ export default class Matrix {
     matrix.setElement(2, 0, a);
     matrix.setElement(2, 1, b);
 
-    console.log(matrix.format())
-
     return matrix;
   }
 
@@ -103,6 +101,18 @@ export default class Matrix {
 
       this.elements.push(row);
     }
+  }
+
+  transpose(): Matrix {
+    let matrix: Matrix = new Matrix();
+
+    for (let x: number = 0; x < this.size; x++) {
+      for (let y: number = 0; y < this.size; y++) {
+        matrix.setElement(x, y, this.getElement(y, x));
+      }
+    }
+
+    return matrix;
   }
 
   inverse(): Matrix {

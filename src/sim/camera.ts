@@ -16,9 +16,9 @@ export default class Camera {
     // this.elevation = 45;
     // this.range = 750;
 
-    this.azimuth = 0;
-    this.elevation = 0;
-    this.range = 0.2;
+    this.azimuth = 225;
+    this.elevation = 45;
+    this.range = 2;
 
     this.origin = new Point(0, 0);
 
@@ -79,7 +79,7 @@ export default class Camera {
       // Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.sin(this.getAzimuth() * Math.PI / 180) + this.getOrigin().getY(),
       Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.cos(this.getAzimuth() * Math.PI / 180),
       Math.cos(this.getElevation() * Math.PI / 180) * this.getRange() * Math.sin(this.getAzimuth() * Math.PI / 180),
-      -Math.sin(this.getElevation() * Math.PI / 180) * this.getRange(),
+      Math.sin(this.getElevation() * Math.PI / 180) * this.getRange(),
       1.0
     );
   }

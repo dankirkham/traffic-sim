@@ -21,11 +21,12 @@ export default class WebGLGraphics {
    uniform mat4 uPMatrix; \
    varying lowp vec4 vColor; \
    void main(void) { \
-     gl_Position = uMVMatrix * uPMatrix * vec4(aVertexPosition, 1.0); \
+     gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); \
      vColor = aVertexColor; \
    }';
 
   private gl: WebGLRenderingContext;
+  private canvas: HTMLCanvasElement;
   private shaderProgram;
   private uMVMatrix: Matrix;
   private uPMatrix: Matrix;
@@ -181,14 +182,15 @@ export default class WebGLGraphics {
 
     let elevationMatrix: Matrix = Matrix.rotation('x', camera.getElevation());
 
-    let cameraMatrix: Matrix = Matrix.translation(new Vector(0, 0, camera.getRange(), 1));
+    let cameraMatrix: Matrix = Matrix.translation(new Vector(0, 0, -camera.getRange(), 1));
 
     return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix).multiplyByMatrix(cameraMatrix);
+    // return Matrix.identity();
   }
 
   private buildPMatrix(): Matrix {
-    // return Matrix.perspective(80, 16/9, 0.1, 2).inverse();
-    return Matrix.identity();
+    return Matrix.perspective(80, this.canvas.width / this.canvas.height, 0.1, 40);
+    // return Matrix.identity();
   }
 
   private setUniforms(): void {
@@ -224,6 +226,8 @@ export default class WebGLGraphics {
   }
 
   constructor(canvas: HTMLCanvasElement) {
+    this.canvas = canvas;
+
     this.gl = this.initWebGL(canvas);
 
     if (!this.gl)

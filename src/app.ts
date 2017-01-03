@@ -50,7 +50,7 @@ function handleMouseMove(event) {
   let mouseX: number = event.clientX;
   let mouseY: number = event.clientY;
 
-  camera.setAzimuth(camera.getAzimuth() + cameraConfig.getHorizontalSensitivity() * (mouseX - lastMouseX));
+  camera.setAzimuth(camera.getAzimuth() - cameraConfig.getHorizontalSensitivity() * (mouseX - lastMouseX));
   camera.setElevation(camera.getElevation() + cameraConfig.getVerticalSensitivity() * (mouseY - lastMouseY));
 
   lastMouseX = mouseX;
@@ -75,8 +75,11 @@ canvas.addEventListener("mousewheel", handleMouseWheel, false);
 canvas.addEventListener("DOMMouseScroll", handleMouseWheel, false);
 
 // CanvasGraphics.draw(canvas, map, 1);
+
 function tick() {
   graphics.draw(map, camera);
 }
 
 setInterval(tick, 15);
+
+// graphics.draw(map, camera);
