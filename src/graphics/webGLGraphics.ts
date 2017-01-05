@@ -5,6 +5,7 @@ import Point from "../elements/point";
 import Way from "../elements/way";
 import Matrix from "./util/matrix";
 import Vector from "./util/vector";
+import Buffer from "./util/buffer";
 import Camera from "../sim/camera";
 
 export default class WebGLGraphics {
@@ -30,8 +31,8 @@ export default class WebGLGraphics {
   private shaderProgram;
   private uMVMatrix: Matrix;
   private uPMatrix: Matrix;
-  private vertexPositionAttribute;
-  private vertexColorAttribute;
+  private aVertexPosition;
+  private aVertexColor;
 
   private initWebGL(canvas: HTMLCanvasElement): WebGLRenderingContext {
     let gl: WebGLRenderingContext = undefined;
@@ -73,106 +74,11 @@ export default class WebGLGraphics {
 
     this.gl.useProgram(this.shaderProgram);
 
-    this.vertexPositionAttribute = this.gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
-    this.gl.enableVertexAttribArray(this.vertexPositionAttribute);
+    this.aVertexPosition = this.gl.getAttribLocation(this.shaderProgram, 'aVertexPosition');
+    this.gl.enableVertexAttribArray(this.aVertexPosition);
 
-    this.vertexColorAttribute = this.gl.getAttribLocation(this.shaderProgram, 'aVertexColor');
-    this.gl.enableVertexAttribArray(this.vertexColorAttribute);
-  }
-
-  private buildBuffer(map: Map, camera: Camera): WebGLBuffer {
-    let pos: Vector = camera.getPosition();
-
-    let vertices: number[] = [
-      // 1, 0, 0.01,
-      // 1, 0, -0.01,
-      // 0, 0, 0.01,
-      // 0, 0, -0.01,
-
-      1, 0.01, 0,
-      1, -0.01, 0,
-      0, 0.01, 0,
-      0, -0.01, 0,
-
-      0.01, 1, 0,
-      -0.01, 1, 0,
-      0.01, 0, 0,
-      -0.01, 0, 0,
-
-      0.01, 0, 1,
-      -0.01, 0, 1,
-      0.01, 0, 0,
-      -0.01, 0, 0,
-
-      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, 0.0,
-      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, 0.0,
-      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, 0.0,
-      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, 0.0,
-      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
-      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
-      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3,
-      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3,
-      // pos.getElement(0) - 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
-      // pos.getElement(0) - 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
-      // pos.getElement(0) + 0.05, pos.getElement(1) + 0.05, pos.getElement(2) / 3 * 2,
-      // pos.getElement(0) + 0.05, pos.getElement(1) - 0.05, pos.getElement(2) / 3 * 2,
-
-    ];
-
-    // let vertices: number[] = [
-    //   0, map.getHeight(), 0,
-    //   0, 0, 0,
-    //   map.getWidth(), map.getHeight(), 0,
-    //   map.getWidth(), 0, 0,
-    // ];
-
-    let vertexBuffer: WebGLBuffer = this.gl.createBuffer();
-
-    let colors: number[] = [
-      1, 0, 0, 1,
-      1, 0, 0, 1,
-      1, 0, 0, 1,
-      1, 0, 0, 1,
-      0, 1, 0, 1,
-      0, 1, 0, 1,
-      0, 1, 0, 1,
-      0, 1, 0, 1,
-      0, 0, 1, 1,
-      0, 0, 1, 1,
-      0, 0, 1, 1,
-      0, 0, 1, 1,
-      // 0.0, 0.0, 0.0, 1.0,
-      // 0.0, 0.0, 0.0, 1.0,
-      // 0.0, 0.0, 0.0, 1.0,
-      // 0.0, 0.0, 0.0, 1.0,
-      // 0.5, 0.5, 0.0, 1.0,
-      // 0.5, 0.5, 0.0, 1.0,
-      // 0.5, 0.5, 0.0, 1.0,
-      // 0.5, 0.5, 0.0, 1.0,
-      // 0.0, 0.5, 0.5, 1.0,
-      // 0.0, 0.5, 0.5, 1.0,
-      // 0.0, 0.5, 0.5, 1.0,
-      // 0.0, 0.5, 0.5, 1.0,
-    ];
-
-    // let colors: number[] = [
-    //   1.0, 1.0, 1.0, 1.0,
-    //   1.0, 1.0, 1.0, 1.0,
-    //   1.0, 1.0, 1.0, 1.0,
-    //   1.0, 1.0, 1.0, 1.0,
-    // ];
-
-    let colorBuffer: WebGLBuffer = this.gl.createBuffer();
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, vertexBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(vertices), this.gl.STATIC_DRAW);
-    this.gl.vertexAttribPointer(this.vertexPositionAttribute, 3, this.gl.FLOAT, false, 0, 0);
-
-    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
-    this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
-    this.gl.vertexAttribPointer(this.vertexColorAttribute, 4, this.gl.FLOAT, false, 0, 0);
-
-    return vertexBuffer;
+    this.aVertexColor = this.gl.getAttribLocation(this.shaderProgram, 'aVertexColor');
+    this.gl.enableVertexAttribArray(this.aVertexColor);
   }
 
   private buildMVMatrix(camera: Camera): Matrix {
@@ -180,17 +86,15 @@ export default class WebGLGraphics {
 
     let azimuthMatrix: Matrix = Matrix.rotation('y', camera.getAzimuth());
 
-    let elevationMatrix: Matrix = Matrix.rotation('x', camera.getElevation());
+    let elevationMatrix: Matrix = Matrix.rotation('x', -camera.getElevation());
 
     let cameraMatrix: Matrix = Matrix.translation(new Vector(0, 0, -camera.getRange(), 1));
 
     return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix).multiplyByMatrix(cameraMatrix);
-    // return Matrix.identity();
   }
 
   private buildPMatrix(): Matrix {
     return Matrix.perspective(80, this.canvas.width / this.canvas.height, 0.1, 40);
-    // return Matrix.identity();
   }
 
   private setUniforms(): void {
@@ -212,17 +116,17 @@ export default class WebGLGraphics {
     this.gl.enable(this.gl.DEPTH_TEST);
     // Near things obscure far things
     this.gl.depthFunc(this.gl.LEQUAL);
+
+    this.gl.enable(this.gl.CULL_FACE);
+
     // Clear the color as well as the depth buffer.
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    this.buildBuffer(map, camera);
+    let buffer: Buffer = new Buffer();
 
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 4, 4);
-    this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 8, 4);
-    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 12, 4);
-    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 16, 4);
-    // this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 20, 4);
+    buffer.build(map, camera);
+    buffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
+    buffer.render(this.gl);
   }
 
   constructor(canvas: HTMLCanvasElement) {
