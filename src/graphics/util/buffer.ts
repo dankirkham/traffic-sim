@@ -1,9 +1,9 @@
 import Map from "../../elements/map";
-import Camera from "../../sim/camera";
 
 import Mesh from "../meshes/mesh";
 import AxisMesh from "../meshes/axisMesh";
 import BuildingMesh from "../meshes/buildingMesh";
+import Matrix from "./matrix";
 
 export default class Buffer {
   private vertices: number[];
@@ -16,13 +16,16 @@ export default class Buffer {
     this.meshes = [];
   }
 
-  public build(map: Map, camera: Camera): void {
+  public build(map: Map): void {
     // Axis coordinates
     let axis: AxisMesh = new AxisMesh(this.vertices.length);
     this.pushMesh(axis);
 
     // BuildingMesh
     let building: BuildingMesh = new BuildingMesh(this.vertices.length);
+
+    building.multiplyByMatrix(Matrix.rotation('z', 45));
+
     this.pushMesh(building);
   }
 
@@ -32,7 +35,7 @@ export default class Buffer {
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-    gl.vertexAttribPointer(aVertexPosition, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(aVertexPosition, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.colors), gl.STATIC_DRAW);
@@ -46,9 +49,21 @@ export default class Buffer {
   }
 
   private pushMesh(mesh: Mesh) {
-    this.vertices = this.vertices.concat(mesh.vertices);
-    this.colors = this.colors.concat(mesh.colors);
-    
+    this.vertices = this.vertices.concat(mesh.getVertices());
+    this.colors = this.colors.concat(mesh.getColors());
+
     this.meshes.push(mesh);
+  }
+
+  public getVertices() {
+    return this.vertices;
+  }
+
+  public getColors() {
+    return this.colors;
+  }
+
+  public getMeshes() {
+    return this.meshes;
   }
 }

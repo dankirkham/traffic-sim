@@ -110,4 +110,13 @@ export default class Vector {
 
     return "[ " + scaledVector.getElement(0) + ", " + scaledVector.getElement(1) + ", " + scaledVector.getElement(2) + ", " + scaledVector.getElement(3) + " ]";
   }
+
+  flatten(): number[] {
+    return [
+      this.getElement(0),
+      this.getElement(1),
+      this.getElement(2),
+      this.getElement(3)
+    ];
+  }
 }

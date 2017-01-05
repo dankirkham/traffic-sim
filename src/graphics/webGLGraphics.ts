@@ -16,13 +16,13 @@ export default class WebGLGraphics {
   }';
 
   private static VERTEX_SHADER_SOURCE: string =
-  'attribute vec3 aVertexPosition; \
+  'attribute vec4 aVertexPosition; \
    attribute vec4 aVertexColor; \
    uniform mat4 uMVMatrix; \
    uniform mat4 uPMatrix; \
    varying lowp vec4 vColor; \
    void main(void) { \
-     gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); \
+     gl_Position = uPMatrix * uMVMatrix * aVertexPosition; \
      vColor = aVertexColor; \
    }';
 
@@ -124,7 +124,7 @@ export default class WebGLGraphics {
 
     let buffer: Buffer = new Buffer();
 
-    buffer.build(map, camera);
+    buffer.build(map);
     buffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
     buffer.render(this.gl);
   }
