@@ -18,7 +18,7 @@ export default class Camera {
 
     this.azimuth = 225;
     this.elevation = 45;
-    this.range = 2;
+    this.range = 2.5;
 
     this.origin = new Point(0, 0);
 

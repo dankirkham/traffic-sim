@@ -3,8 +3,9 @@ export default class Mesh {
   readonly vertices: number[];
   readonly colors: number[];
 
-  constructor(offset: number) {
-    this.offset = offset;
+  constructor(arrayPosition: number) {
+    // Divide by three because our mesh vertex arrays are 3-D vectors
+    this.offset = Math.floor(arrayPosition / 3);
   }
 
   public render(gl : WebGLRenderingContext): void {

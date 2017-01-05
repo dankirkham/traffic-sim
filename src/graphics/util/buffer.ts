@@ -3,6 +3,7 @@ import Camera from "../../sim/camera";
 
 import Mesh from "../meshes/mesh";
 import AxisMesh from "../meshes/axisMesh";
+import BuildingMesh from "../meshes/buildingMesh";
 
 export default class Buffer {
   private vertices: number[];
@@ -16,11 +17,13 @@ export default class Buffer {
   }
 
   public build(map: Map, camera: Camera): void {
+    // Axis coordinates
     let axis: AxisMesh = new AxisMesh(this.vertices.length);
-
     this.pushMesh(axis);
 
-    this.meshes.push(axis);
+    // BuildingMesh
+    let building: BuildingMesh = new BuildingMesh(this.vertices.length);
+    this.pushMesh(building);
   }
 
   public bind(gl: WebGLRenderingContext, aVertexPosition, aVertexColor): void {
@@ -45,5 +48,7 @@ export default class Buffer {
   private pushMesh(mesh: Mesh) {
     this.vertices = this.vertices.concat(mesh.vertices);
     this.colors = this.colors.concat(mesh.colors);
+    
+    this.meshes.push(mesh);
   }
 }

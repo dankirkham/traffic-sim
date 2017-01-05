@@ -94,7 +94,7 @@ export default class WebGLGraphics {
   }
 
   private buildPMatrix(): Matrix {
-    return Matrix.perspective(80, this.canvas.width / this.canvas.height, 0.1, 40);
+    return Matrix.perspective(60, this.canvas.width / this.canvas.height, 0.1, 40);
   }
 
   private setUniforms(): void {
