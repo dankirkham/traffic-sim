@@ -31,6 +31,11 @@ export default class WebMapGenerator extends MapGenerator {
     for (let intersectionDistance of intersectionDistances) {
       let way: Way = new Way(intersection, intersectionDistance);
 
+      if (intersectionDistance.getLocation().getX() == intersection.getLocation().getX() &&
+          intersectionDistance.getLocation().getY() == intersection.getLocation().getY())
+        // Intersections are the same.
+        continue;
+
       if (intersectionDistance.getWays().length >= config.maxWaysPerIntersection ||
           intersection.getWays().length >= config.maxWaysPerIntersection)
         // Intersection has too many ways.
