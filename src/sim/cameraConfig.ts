@@ -13,12 +13,12 @@ export default class CameraConfig {
     this.minElevation = 1;
     this.maxElevation = 89.9;
 
-    this.minRange = 0.1;
-    this.maxRange = 30;
+    this.minRange = 10;
+    this.maxRange = 1000;
 
     this.horizontalSensitivity = 0.4;
     this.verticalSensitivity = 0.4;
-    this.zoomSensitivity = 0.00083333333;
+    this.zoomSensitivity = 0.083333333;
   }
 
   getMinElevation(): number {

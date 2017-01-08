@@ -1,9 +1,14 @@
-import Map from "../../elements/map";
-
+import Building from "../../elements/building"
+import Point from "../../elements/point"
+import Map from "../../elements/map"
+import Way from "../../elements/way"
 import Mesh from "../meshes/mesh";
 import AxisMesh from "../meshes/axisMesh";
 import BuildingMesh from "../meshes/buildingMesh";
+import GrassMesh from "../meshes/grassMesh";
+import RoadMesh from "../meshes/roadMesh";
 import Matrix from "./matrix";
+import Vector from "./vector";
 
 export default class Buffer {
   private vertices: number[];
@@ -21,12 +26,28 @@ export default class Buffer {
     let axis: AxisMesh = new AxisMesh(this.vertices.length);
     this.pushMesh(axis);
 
+    // GrassMesh
+    let grassMesh: GrassMesh = new GrassMesh(this.vertices.length, map);
+    this.pushMesh(grassMesh);
+
     // BuildingMesh
-    let building: BuildingMesh = new BuildingMesh(this.vertices.length);
+    for (let building of map.getBuildings()) {
+      let mesh: BuildingMesh = new BuildingMesh(this.vertices.length);
 
-    building.multiplyByMatrix(Matrix.rotation('z', 45));
+      mesh.multiplyByMatrix(Matrix.scale(20));
 
-    this.pushMesh(building);
+      mesh.multiplyByMatrix(Matrix.rotation('z', -building.getWay().getHeading()));
+
+      let location: Point = building.getLocation();
+      mesh.multiplyByMatrix(Matrix.translation(new Vector(location.getX(), location.getY(), 0, 1)));
+
+      this.pushMesh(mesh);
+    }
+
+    for (let way of map.getWays()) {
+      let roadMesh: RoadMesh = new RoadMesh(this.vertices.length, way);
+      this.pushMesh(roadMesh);
+    }
   }
 
   public bind(gl: WebGLRenderingContext, aVertexPosition, aVertexColor): void {

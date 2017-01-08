@@ -33,6 +33,7 @@ export default class WebGLGraphics {
   private uPMatrix: Matrix;
   private aVertexPosition;
   private aVertexColor;
+  private staticBuffer: Buffer;
 
   private initWebGL(canvas: HTMLCanvasElement): WebGLRenderingContext {
     let gl: WebGLRenderingContext = undefined;
@@ -81,20 +82,22 @@ export default class WebGLGraphics {
     this.gl.enableVertexAttribArray(this.aVertexColor);
   }
 
-  private buildMVMatrix(camera: Camera): Matrix {
+  private buildMVMatrix(map: Map, camera: Camera): Matrix {
+    let cameraMatrix: Matrix = Matrix.translation(new Vector(-map.getWidth() / 2, -map.getHeight() / 2, 0, 1));
+
     let standUpMatrix: Matrix = Matrix.rotation('x', 90);
 
     let azimuthMatrix: Matrix = Matrix.rotation('y', camera.getAzimuth());
 
     let elevationMatrix: Matrix = Matrix.rotation('x', -camera.getElevation());
 
-    let cameraMatrix: Matrix = Matrix.translation(new Vector(0, 0, -camera.getRange(), 1));
+    let rangeMatrix: Matrix = Matrix.translation(new Vector(0, 0, -camera.getRange(), 1));
 
-    return standUpMatrix.multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix).multiplyByMatrix(cameraMatrix);
+    return cameraMatrix.multiplyByMatrix(standUpMatrix).multiplyByMatrix(azimuthMatrix).multiplyByMatrix(elevationMatrix).multiplyByMatrix(rangeMatrix);
   }
 
   private buildPMatrix(): Matrix {
-    return Matrix.perspective(60, this.canvas.width / this.canvas.height, 0.1, 40);
+    return Matrix.perspective(60, this.canvas.width / this.canvas.height, 10, 1500);
   }
 
   private setUniforms(): void {
@@ -106,7 +109,7 @@ export default class WebGLGraphics {
   }
 
   draw(map: Map, camera: Camera) {
-    this.uMVMatrix = this.buildMVMatrix(camera);
+    this.uMVMatrix = this.buildMVMatrix(map, camera);
 
     this.setUniforms();
 
@@ -122,14 +125,11 @@ export default class WebGLGraphics {
     // Clear the color as well as the depth buffer.
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
-    let buffer: Buffer = new Buffer();
-
-    buffer.build(map);
-    buffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
-    buffer.render(this.gl);
+    this.staticBuffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
+    this.staticBuffer.render(this.gl);
   }
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, map: Map) {
     this.canvas = canvas;
 
     this.gl = this.initWebGL(canvas);
@@ -140,5 +140,8 @@ export default class WebGLGraphics {
     this.initShaders();
 
     this.uPMatrix = this.buildPMatrix();
+
+    this.staticBuffer = new Buffer();
+    this.staticBuffer.build(map);
   }
 }

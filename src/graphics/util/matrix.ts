@@ -79,6 +79,16 @@ export default class Matrix {
     return matrix;
   }
 
+  static scale(multiplier: number): Matrix {
+    let matrix: Matrix = Matrix.identity();
+
+    matrix.setElement(0, 0, multiplier);
+    matrix.setElement(1, 1, multiplier);
+    matrix.setElement(2, 2, multiplier);
+
+    return matrix;
+  }
+
   static identity(size = 4): Matrix {
     let matrix: Matrix = new Matrix(size);
 
