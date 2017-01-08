@@ -103,7 +103,7 @@ export default class Way {
   getHeading(): number {
     let vector = this.getIntersection(1).getLocation().subtract(this.getIntersection(0).getLocation());
 
-    return Math.atan(vector.getX() / vector.getY()) * (180 / Math.PI);
+    return Math.atan2(vector.getX(), vector.getY()) * (180 / Math.PI);
   }
 
   getAngleBetweenWay(that: Way): number {
