@@ -20,7 +20,7 @@ let config: MapGeneratorConfig = new MapGeneratorConfig();
 let map: Map = WebMapGenerator.generate(config);
 // let map: Map = GridMapGenerator.generate(config);
 
-let graphics: WebGLGraphics = new WebGLGraphics(canvas);
+let graphics: WebGLGraphics = new WebGLGraphics(canvas, map);
 
 let cameraConfig: CameraConfig = new CameraConfig();
 let camera: Camera = new Camera(cameraConfig);
@@ -50,7 +50,7 @@ function handleMouseMove(event) {
   let mouseX: number = event.clientX;
   let mouseY: number = event.clientY;
 
-  camera.setAzimuth(camera.getAzimuth() - cameraConfig.getHorizontalSensitivity() * (mouseX - lastMouseX));
+  camera.setAzimuth(camera.getAzimuth() + cameraConfig.getHorizontalSensitivity() * (mouseX - lastMouseX));
   camera.setElevation(camera.getElevation() + cameraConfig.getVerticalSensitivity() * (mouseY - lastMouseY));
 
   lastMouseX = mouseX;
