@@ -3,9 +3,14 @@ import Intersection from "../elements/intersection";
 import Map from "../elements/map";
 import Point from "../elements/point";
 import Way from "../elements/way";
+import World from "../elements/world";
+import Graphics from "./graphics";
 
-export default class CanvasGraphics {
-  private static drawWays(context: CanvasRenderingContext2D, ways: Way[], scale: number) {
+export default class CanvasGraphics implements Graphics {
+  private scale: number;
+  private canvas: HTMLCanvasElement;
+
+  private drawWays(context: CanvasRenderingContext2D, ways: Way[], scale: number) {
     context.beginPath();
 
     for (let way of ways) {
@@ -20,7 +25,7 @@ export default class CanvasGraphics {
     context.closePath();
   }
 
-  private static drawIntersections(context: CanvasRenderingContext2D, intersections: Intersection[], scale: number) {
+  private drawIntersections(context: CanvasRenderingContext2D, intersections: Intersection[], scale: number) {
     let id = context.createImageData(1, 1);
     let d = id.data;
     d[0] = 255;
@@ -42,7 +47,7 @@ export default class CanvasGraphics {
     }
   }
 
-private static drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], scale: number) {
+private drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], scale: number) {
     let BOX_SIZE: number = 20;
 
     let id = context.createImageData(1, 1);
@@ -85,13 +90,20 @@ private static drawBuildings(context: CanvasRenderingContext2D, buildings: Build
     }
   }
 
-  static draw(canvas: HTMLCanvasElement, map: Map, scale: number) {
-    let context: CanvasRenderingContext2D = canvas.getContext("2d");
+  draw(world: World) {
+    let context: CanvasRenderingContext2D = this.canvas.getContext("2d");
 
-    this.drawWays(context, map.getWays(), scale);
+    let map: Map = world.getMap();
 
-    this.drawIntersections(context, map.getIntersections(), scale);
+    this.drawWays(context, map.getWays(), this.scale);
 
-    this.drawBuildings(context, map.getBuildings(), scale)
+    this.drawIntersections(context, map.getIntersections(), this.scale);
+
+    this.drawBuildings(context, map.getBuildings(), this.scale)
+  }
+
+  constructor(canvas: HTMLCanvasElement, scale: number) {
+    this.canvas = canvas;
+    this.scale = scale;
   }
 }

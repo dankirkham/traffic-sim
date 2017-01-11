@@ -3,12 +3,14 @@ import Intersection from "../elements/intersection";
 import Map from "../elements/map";
 import Point from "../elements/point";
 import Way from "../elements/way";
+import World from "../elements/world";
 import Matrix from "./util/matrix";
 import Vector from "./util/vector";
 import Buffer from "./util/buffer";
 import Camera from "../sim/camera";
+import Graphics from "./graphics";
 
-export default class WebGLGraphics {
+export default class WebGLGraphics implements Graphics {
   private static FRAGMENT_SHADER_SOURCE: string =
   'varying lowp vec4 vColor; \
   void main(void) { \
@@ -108,7 +110,10 @@ export default class WebGLGraphics {
     this.gl.uniformMatrix4fv(pUniform, false, new Float32Array(this.uPMatrix.flatten()));
   }
 
-  draw(map: Map, camera: Camera) {
+  draw(world: World) {
+    let map: Map = world.getMap();
+    let camera: Camera = world.getCamera();
+
     this.uMVMatrix = this.buildMVMatrix(map, camera);
 
     this.setUniforms();
