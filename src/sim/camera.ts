@@ -84,24 +84,28 @@ export default class Camera {
     );
   }
 
-  getUp(): Vector {
-    let upElevation: number = this.getElevation() + 90;
-    let upAzimuth: number = this.getAzimuth();
-
-    if (upElevation > 90) {
-      upElevation = 180 - upElevation;
-      upAzimuth = (upAzimuth + 180) % 360;
-    }
-
-    console.log(upElevation);
-
-    let up: Vector =  new Vector(
-      Math.cos(upElevation * Math.PI / 180) * this.getRange() * Math.cos(upAzimuth * Math.PI / 180),
-      Math.cos(upElevation * Math.PI / 180) * this.getRange() * Math.sin(upAzimuth * Math.PI / 180),
-      -Math.sin(upElevation * Math.PI / 180) * this.getRange(),
-      1.0
-    );
-
-    return up.toUnit();
+  getConfig(): CameraConfig {
+    return this.config;
   }
+
+  // getUp(): Vector {
+  //   let upElevation: number = this.getElevation() + 90;
+  //   let upAzimuth: number = this.getAzimuth();
+  //
+  //   if (upElevation > 90) {
+  //     upElevation = 180 - upElevation;
+  //     upAzimuth = (upAzimuth + 180) % 360;
+  //   }
+  //
+  //   console.log(upElevation);
+  //
+  //   let up: Vector =  new Vector(
+  //     Math.cos(upElevation * Math.PI / 180) * this.getRange() * Math.cos(upAzimuth * Math.PI / 180),
+  //     Math.cos(upElevation * Math.PI / 180) * this.getRange() * Math.sin(upAzimuth * Math.PI / 180),
+  //     -Math.sin(upElevation * Math.PI / 180) * this.getRange(),
+  //     1.0
+  //   );
+  //
+  //   return up.toUnit();
+  // }
 }
