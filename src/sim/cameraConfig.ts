@@ -9,16 +9,36 @@ export default class CameraConfig {
   protected verticalSensitivity: number;
   protected zoomSensitivity: number;
 
+  protected minX: number;
+  protected maxX: number;
+
+  protected minY: number;
+  protected maxY: number;
+
+  protected acceleration: number;
+  protected friction: number;
+  protected maxVelocity: number;
+
   constructor() {
-    this.minElevation = 1;
+    this.minElevation = 15;
     this.maxElevation = 89.9;
 
-    this.minRange = 10;
+    this.minRange = 150;
     this.maxRange = 1000;
 
     this.horizontalSensitivity = 0.4;
     this.verticalSensitivity = 0.4;
     this.zoomSensitivity = 0.083333333;
+
+    this.minX = 0;
+    this.maxX = 1520;
+
+    this.minY = 0;
+    this.maxY = 855;
+
+    this.acceleration = 10000;
+    this.friction = 5000;
+    this.maxVelocity = 2000;
   }
 
   getMinElevation(): number {
@@ -47,5 +67,33 @@ export default class CameraConfig {
 
   getZoomSensitivity(): number {
     return this.zoomSensitivity;
+  }
+
+  getMinX(): number {
+    return this.minX;
+  }
+
+  getMaxX(): number {
+    return this.maxX;
+  }
+
+  getMinY(): number {
+    return this.minY;
+  }
+
+  getMaxY(): number {
+    return this.maxY;
+  }
+
+  getAcceleration(): number {
+    return this.acceleration;
+  }
+
+  getFriction(): number {
+    return this.friction;
+  }
+
+  getMaxVelocity(): number {
+    return this.maxVelocity;
   }
 }

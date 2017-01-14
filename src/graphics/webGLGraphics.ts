@@ -85,7 +85,7 @@ export default class WebGLGraphics implements Graphics {
   }
 
   private buildMVMatrix(map: Map, camera: Camera): Matrix {
-    let cameraMatrix: Matrix = Matrix.translation(new Vector(-map.getWidth() / 2, -map.getHeight() / 2, 0, 1));
+    let cameraMatrix: Matrix = Matrix.translation(new Vector(-camera.getLocation().getX(), -camera.getLocation().getY(), 0, 1));
 
     let standUpMatrix: Matrix = Matrix.rotation('x', 90);
 

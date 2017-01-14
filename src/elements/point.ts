@@ -50,4 +50,23 @@ export default class Point {
   scalarMultiply(scalar: number) {
     return new Point(this.getX() * scalar, this.getY() * scalar);
   }
+
+  unit(): Point {
+    if (this.magnitude() == 0) {
+      return this;
+    } else {
+      return new Point(this.getX() / this.magnitude(), this.getY() / this.magnitude());
+    }
+  }
+
+  rotate(angle: number): Point {
+    let cos: number = -Math.sin(angle * Math.PI / 180);
+    let sin: number = Math.cos(angle * Math.PI / 180);
+
+    return new Point(this.getX() * sin + this.getY() * cos, this.getX() * cos - this.getY() * sin);
+  }
+
+  toString(): string {
+    return '(' + this.getX() + ', ' + this.getY() + ')';
+  }
 }
