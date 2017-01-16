@@ -1,6 +1,6 @@
-import Building from "../../elements/building"
-import Point from "../../elements/point"
-import Map from "../../elements/map"
+import Building from "../../elements/building";
+import Point from "../../elements/point";
+import Map from "../../elements/map";
 import Way from "../../elements/way"
 import Mesh from "../meshes/mesh";
 import AxisMesh from "../meshes/axisMesh";
@@ -32,7 +32,7 @@ export default class Buffer {
 
     // BuildingMesh
     for (let building of map.getBuildings()) {
-      let mesh: BuildingMesh = new BuildingMesh(this.vertices.length);
+      let mesh: BuildingMesh = new BuildingMesh(this.vertices.length, building.getType());
 
       mesh.multiplyByMatrix(Matrix.scale(20));
 

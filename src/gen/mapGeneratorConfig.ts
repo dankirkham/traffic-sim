@@ -19,6 +19,13 @@ export default class MapGeneratorConfig {
   wayMinDistance: number = 12;
   // Number of buildings that will be generated
   buildingCount: number = 750;
+  // Ratio of residential to industrial buildings
+  percentResidential: number = 67;
+  // Building capacities
+  minCapacityResidential: number = 1;
+  maxCapacityResidential: number = 2;
+  minCapacityIndustrial: number = 2;
+  maxCapacityIndustrial: number = 4;
   // END - Bulding options
 
   // BEGIN - WebMapGenerator Options

@@ -38,7 +38,6 @@ let graphics: WebGLGraphics = new WebGLGraphics(canvas, map);
 camera.getLocation().setX(map.getWidth() / 2);
 camera.getLocation().setY(map.getHeight() / 2);
 
-// Mouse handling stuff
 let mouseHandler: MouseHandler = new MouseHandler(camera);
 mouseHandler.bind(canvas, document);
 

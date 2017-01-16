@@ -1,4 +1,6 @@
 import Building from "../elements/building";
+import {BuildingType} from "../elements/buildingType";
+import Person from "../elements/person";
 import Point from "../elements/point";
 import Way from "../elements/way";
 import Intersection from "../elements/intersection";
@@ -81,5 +83,64 @@ export default class MapGenerator {
         }
       }
     }
+
+    // Allocate buildings
+    let residentialCount: number = Math.floor(map.getBuildings().length * config.percentResidential / 100);
+    let residentialBuildings: Building[] = [];
+    let industrialBuildings: Building[] = [];
+
+    for (let building of map.getBuildings()) {
+      if (residentialCount > 0) {
+        building.setType(BuildingType.Residential);
+        building.setCapacity(Math.floor(Math.random() * (config.maxCapacityResidential - config.minCapacityResidential + 1)) + config.minCapacityResidential);
+        residentialBuildings.push(building);
+
+        residentialCount -= 1;
+      } else {
+        building.setType(BuildingType.Industrial);
+        building.setCapacity(Math.floor(Math.random() * (config.maxCapacityIndustrial - config.minCapacityIndustrial + 1)) + config.minCapacityIndustrial);
+        industrialBuildings.push(building);
+      }
+    }
+
+    // DEBUG: Calculate max population for each type of building
+    let populationResidential: number = 0;
+    let populationIndustrial: number = 0;
+
+    for (let building of map.getBuildings()) {
+      if (building.getType() == BuildingType.Residential) {
+        populationResidential += building.getCapacity();
+      } else {
+        populationIndustrial += building.getCapacity();
+      }
+    }
+
+    console.log('Residential Population: ' + populationResidential);
+    console.log('Industrial  Population: ' + populationIndustrial);
+
+    // Generate Peeps
+    let residentialCounter: number = 0;
+    let industrialCounter: number = 0;
+
+    while (residentialCounter < residentialBuildings.length && industrialCounter < industrialBuildings.length) {
+      let person: Person = new Person("Steve");
+
+      person.setHome(residentialBuildings[residentialCounter]);
+      person.setWork(industrialBuildings[industrialCounter]);
+
+      person.link();
+
+      map.addPerson(person);
+
+      if (residentialBuildings[residentialCounter].getCapacity() <= residentialBuildings[residentialCounter].getPersons().length) {
+        residentialCounter += 1;
+      }
+
+      if (industrialBuildings[industrialCounter].getCapacity() <= industrialBuildings[industrialCounter].getPersons().length) {
+        industrialCounter += 1;
+      }
+    }
+
+    console.log('Generated ' + map.getPersons().length + ' people.');
   }
 }
