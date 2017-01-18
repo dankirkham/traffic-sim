@@ -6,6 +6,7 @@ import Way from "../elements/way";
 import Intersection from "../elements/intersection";
 import Map from "../elements/map";
 import MapGeneratorConfig from "./mapGeneratorConfig"
+import NameGenerator from "./name/nameGenerator";
 
 export default class MapGenerator {
   static randomPoint(height: number, width: number): Point {
@@ -115,15 +116,12 @@ export default class MapGenerator {
       }
     }
 
-    console.log('Residential Population: ' + populationResidential);
-    console.log('Industrial  Population: ' + populationIndustrial);
-
     // Generate Peeps
     let residentialCounter: number = 0;
     let industrialCounter: number = 0;
 
     while (residentialCounter < residentialBuildings.length && industrialCounter < industrialBuildings.length) {
-      let person: Person = new Person("Steve");
+      let person: Person = new Person(NameGenerator.generate());
 
       person.setHome(residentialBuildings[residentialCounter]);
       person.setWork(industrialBuildings[industrialCounter]);
@@ -140,7 +138,5 @@ export default class MapGenerator {
         industrialCounter += 1;
       }
     }
-
-    console.log('Generated ' + map.getPersons().length + ' people.');
   }
 }
