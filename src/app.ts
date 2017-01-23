@@ -1,4 +1,5 @@
 import Map from "./elements/map";
+import Person from "./elements/person";
 import Way from "./elements/way";
 import World from "./elements/world"
 import GridMapGenerator from "./gen/gridMapGenerator";
@@ -11,6 +12,8 @@ import Camera from "./sim/camera";
 import CameraConfig from "./sim/cameraConfig";
 import KeyHandler from "./sim/keyHandler";
 import MouseHandler from "./sim/mouseHandler";
+import Scheduler from "./sim/scheduler/scheduler";
+import SchedulerEventType from "./sim/scheduler/schedulerEventType";
 
 let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
@@ -40,6 +43,14 @@ camera.getLocation().setY(map.getHeight() / 2);
 
 let mouseHandler: MouseHandler = new MouseHandler(camera);
 mouseHandler.bind(canvas, document);
+
+// Initialize Schedule?!?!?!?!?! TODO:
+let scheduler: Scheduler = new Scheduler();
+world.setScheduler(scheduler);
+
+for (let person of map.getPersons()) {
+  scheduler.schedule(person, SchedulerEventType.HomeToWork);
+}
 
 function graphicsTick() {
   graphics.draw(world);

@@ -1,9 +1,11 @@
 import Building from "./building";
+import Chronotype from "../sim/chronotype/chronotype";
 
 export default class Person {
   private name: string;
   private home: Building;
   private work: Building;
+  private chronotype: typeof Chronotype;
 
   constructor(name: string) {
     this.name = name;
@@ -27,6 +29,14 @@ export default class Person {
 
   public setWork(building: Building): void {
     this.work = building;
+  }
+
+  public getChronotype(): typeof Chronotype {
+    return this.chronotype;
+  }
+
+  public setChronotype(chronotype: typeof Chronotype) {
+    this.chronotype = chronotype;
   }
 
   public link(): void {

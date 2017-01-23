@@ -1,9 +1,11 @@
 import Map from "./map";
-import Camera from "../sim/camera"
+import Camera from "../sim/camera";
+import Scheduler from "../sim/scheduler/scheduler";
 
 export default class World {
   private map: Map;
   private camera: Camera;
+  private scheduler: Scheduler;
 
   getMap(): Map {
     return this.map;
@@ -19,5 +21,13 @@ export default class World {
 
   setCamera(camera: Camera): void {
     this.camera = camera;
+  }
+
+  getScheduler(): Scheduler {
+    return this.scheduler;
+  }
+
+  setScheduler(scheduler: Scheduler): void {
+    this.scheduler = scheduler;
   }
 }

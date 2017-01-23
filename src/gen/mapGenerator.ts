@@ -7,6 +7,9 @@ import Intersection from "../elements/intersection";
 import Map from "../elements/map";
 import MapGeneratorConfig from "./mapGeneratorConfig"
 import NameGenerator from "./name/nameGenerator";
+import EarlyBird from "../sim/chronotype/earlyBird";
+import LateRiser from "../sim/chronotype/lateRiser";
+import Punctual from "../sim/chronotype/punctual";
 
 export default class MapGenerator {
   static randomPoint(height: number, width: number): Point {
@@ -136,6 +139,22 @@ export default class MapGenerator {
 
       if (industrialBuildings[industrialCounter].getCapacity() <= industrialBuildings[industrialCounter].getPersons().length) {
         industrialCounter += 1;
+      }
+    }
+
+    // Generate Chronotypes
+    for (let person of map.getPersons()) {
+      let rng: number = Math.floor(Math.random() * 3);
+
+      switch (rng) {
+        case 0:
+          person.setChronotype(EarlyBird);
+          break;
+        case 1:
+          person.setChronotype(LateRiser);
+          break;
+        default:
+          person.setChronotype(Punctual);
       }
     }
   }
