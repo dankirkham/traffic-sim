@@ -6,6 +6,16 @@ export default class SchedulerEvent {
   private minute: number;
   private type: SchedulerEventType;
 
+  public static compare = function (a, b) {
+      if (a.getMinute() < b.getMinute()) return -1;
+      if (a.getMinute() > b.getMinute()) return 1;
+      return 0;
+  };
+
+  public static valueOf = function (a) {
+    return a.getMinute();
+  }
+
   constructor(person: Person, minute: number, type: SchedulerEventType) {
     this.person = person;
     this.minute = minute;

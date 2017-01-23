@@ -1,22 +1,12 @@
-import Map from "./elements/map";
-import Person from "./elements/person";
-import Way from "./elements/way";
 import World from "./elements/world";
 import WorldGenerator from "./gen/worldGenerator";
 import CanvasGraphics from "./graphics/canvasGraphics";
 import WebGLGraphics from "./graphics/webGLGraphics";
-import Matrix from "./graphics/util/matrix";
-import Camera from "./sim/camera";
-import CameraConfig from "./sim/cameraConfig";
-import KeyHandler from "./sim/keyHandler";
-import MouseHandler from "./sim/mouseHandler";
-import Scheduler from "./sim/scheduler/scheduler";
-import SchedulerEventType from "./sim/scheduler/schedulerEventType";
 
 let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
-canvas.width = window.innerWidth - 100;
-canvas.height = window.innerHeight - 100;
+canvas.width = window.innerWidth - 20;
+canvas.height = window.innerHeight - 20;
 
 let world: World = WorldGenerator.generate(canvas);
 

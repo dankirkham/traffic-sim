@@ -5,11 +5,13 @@ import MouseHandler from "../sim/mouseHandler";
 import Map from "../elements/map";
 import World from "../elements/world";
 import Scheduler from "../sim/scheduler/scheduler";
+import SchedulerEvent from "../sim/scheduler/schedulerEvent";
 import SchedulerEventType from "../sim/scheduler/schedulerEventType";
 import PersonGenerator from "./personGenerator";
 import GridMapGenerator from "./map/gridMapGenerator";
 import WebMapGenerator from "./map/webMapGenerator";
 import MapGeneratorConfig from "./map/mapGeneratorConfig";
+import ArrayUtils from "../util/arrayUtils";
 
 export default class WorldGenerator {
   private static initializeInput(canvas: HTMLCanvasElement, camera: Camera): void {
@@ -28,6 +30,9 @@ export default class WorldGenerator {
     for (let person of world.getPersons()) {
       scheduler.schedule(person, SchedulerEventType.HomeToWork);
     }
+
+    // TODO: This is a sample of the getElementsBetween function.
+    ArrayUtils.getElementsBetween(450, 510, scheduler.getEvents(), SchedulerEvent.valueOf);
   }
 
   private static initializeCamera(world: World): void {

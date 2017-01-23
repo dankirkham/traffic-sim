@@ -5,7 +5,7 @@ import EarlyBird from "../chronotype/earlyBird";
 import Punctual from "../chronotype/punctual";
 import LateRiser from "../chronotype/lateRiser";
 import Person from "../../elements/person";
-import SortUtils from "../../util/sortUtils";
+import ArrayUtils from "../../util/arrayUtils";
 
 export default class Scheduler {
   private events: SchedulerEvent[];
@@ -14,11 +14,7 @@ export default class Scheduler {
   private punctual: Punctual;
   private lateRiser: LateRiser;
 
-  private static eventCompare = function (a, b) {
-      if (a.getMinute() < b.getMinute()) return -1;
-      if (a.getMinute() > b.getMinute()) return 1;
-      return 0;
-  };
+  private lastTime: number;
 
   constructor() {
     this.events = [];
@@ -26,6 +22,8 @@ export default class Scheduler {
     this.earlyBird = new EarlyBird();
     this.punctual = new Punctual();
     this.lateRiser = new LateRiser();
+
+    this.lastTime = 0;
   }
 
   schedule(person: Person, schedulerEventType: SchedulerEventType) {
@@ -39,8 +37,24 @@ export default class Scheduler {
       minute = this.lateRiser.getLeaveTime(schedulerEventType);
     }
 
+    // TODO: I would much rather do it this way. Perhaps this can be done by making Chronotype and interface and not a class.
+    // minute = person.getChronotype().getLeaveTime(schedulerEventType);
+
     let event: SchedulerEvent = new SchedulerEvent(person, minute, schedulerEventType);
 
-    SortUtils.insert(event, this.events, Scheduler.eventCompare);
+    ArrayUtils.insert(event, this.events, SchedulerEvent.compare);
+  }
+
+  tick(time: number): void {
+    // TODO: Run pathing, spawn car
+
+
+
+    this.lastTime = time;
+  }
+
+  // DEBUG: GetEvents
+  getEvents(): SchedulerEvent[] {
+    return this.events;
   }
 }
