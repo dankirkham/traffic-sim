@@ -14,7 +14,7 @@ export default class Camera {
   protected config: CameraConfig;
   protected keyHandler: KeyHandler;
 
-  constructor(config: CameraConfig, keyHandler: KeyHandler) {
+  constructor(config: CameraConfig) {
     this.azimuth = 0;
     this.elevation = 85;
     this.range = 850;
@@ -23,7 +23,6 @@ export default class Camera {
     this.velocity = new Point(0, 0);
 
     this.config = config;
-    this.keyHandler = keyHandler;
   }
 
   getAzimuth(): number {
@@ -74,8 +73,16 @@ export default class Camera {
     return this.config;
   }
 
+  setKeyHandler(keyHandler: KeyHandler): void {
+    this.keyHandler = keyHandler;
+  }
+
   private getAccelerationVector(): Point {
     let acceleration: Point = new Point(0, 0);
+
+    if (!this.keyHandler) {
+      return acceleration;
+    }
 
     if (this.keyHandler.isPressingDirection(KeyHandler.DIRECTION_UP)) {
       acceleration = acceleration.add(new Point(0, -1));
@@ -107,7 +114,7 @@ export default class Camera {
       friction = this.velocity.unit().scalarMultiply(-this.config.getFriction() * 0.001 * millis);
     }
 
-    if (this.keyHandler.isMoving()) {
+    if (this.keyHandler && this.keyHandler.isMoving()) {
       acceleration = this.getAccelerationVector().scalarMultiply(0.001 * millis).add(friction);
     } else {
       acceleration = friction;

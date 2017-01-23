@@ -93,7 +93,7 @@ export default class KeyHandler {
     }
   }
 
-  bind(canvas: HTMLCanvasElement, document: Document) {
+  bind(canvas: HTMLCanvasElement) {
     document.addEventListener("keydown", this.handleKeyDown, false);
     document.addEventListener("keyup", this.handleKeyUp, false);
   }

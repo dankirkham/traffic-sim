@@ -48,7 +48,7 @@ export default class MouseHandler {
     this.camera.setRange(this.camera.getRange() + this.camera.getConfig().getZoomSensitivity() * delta);
   }
 
-  bind(canvas: HTMLCanvasElement, document: Document) {
+  bind(canvas: HTMLCanvasElement) {
     canvas.onmousedown = this.handleMouseDown;
     document.onmouseup = this.handleMouseUp;
     document.onmousemove = this.handleMouseMove;
