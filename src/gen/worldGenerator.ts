@@ -7,6 +7,9 @@ import World from "../elements/world";
 import Scheduler from "../sim/scheduler/scheduler";
 import SchedulerEventType from "../sim/scheduler/schedulerEventType";
 import PersonGenerator from "./personGenerator";
+import GridMapGenerator from "./map/gridMapGenerator";
+import WebMapGenerator from "./map/webMapGenerator";
+import MapGeneratorConfig from "./map/mapGeneratorConfig";
 
 export default class WorldGenerator {
   private static initializeInput(canvas: HTMLCanvasElement, camera: Camera): void {
@@ -38,9 +41,13 @@ export default class WorldGenerator {
     world.setCamera(camera);
   }
 
-  static generate(canvas: HTMLCanvasElement, map: Map): World {
+  static generate(canvas: HTMLCanvasElement): World {
     let world: World = new World();
-    world.setMap(map);
+
+    let config: MapGeneratorConfig = new MapGeneratorConfig();
+
+    world.setMap(WebMapGenerator.generate(config));
+    // world.setMap(GridMapGenerator.generate(config));
 
     PersonGenerator.generate(world);
 

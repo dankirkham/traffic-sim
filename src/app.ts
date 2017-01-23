@@ -2,9 +2,6 @@ import Map from "./elements/map";
 import Person from "./elements/person";
 import Way from "./elements/way";
 import World from "./elements/world";
-import GridMapGenerator from "./gen/map/gridMapGenerator";
-import WebMapGenerator from "./gen/map/webMapGenerator";
-import MapGeneratorConfig from "./gen/map/mapGeneratorConfig";
 import WorldGenerator from "./gen/worldGenerator";
 import CanvasGraphics from "./graphics/canvasGraphics";
 import WebGLGraphics from "./graphics/webGLGraphics";
@@ -21,14 +18,9 @@ let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mai
 canvas.width = window.innerWidth - 100;
 canvas.height = window.innerHeight - 100;
 
-let config: MapGeneratorConfig = new MapGeneratorConfig();
+let world: World = WorldGenerator.generate(canvas);
 
-let map: Map = WebMapGenerator.generate(config);
-// let map: Map = GridMapGenerator.generate(config);
-
-let world: World = WorldGenerator.generate(canvas, map);
-
-let graphics: WebGLGraphics = new WebGLGraphics(canvas, map);
+let graphics: WebGLGraphics = new WebGLGraphics(canvas, world.getMap());
 // let graphics: CanvasGraphics = new CanvasGraphics(canvas, 1);
 
 function graphicsTick() {
