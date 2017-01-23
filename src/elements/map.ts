@@ -1,13 +1,11 @@
 import Building from "./building";
 import Intersection from "./intersection";
-import Person from "./person";
 import Way from "./way";
 
 export default class Map {
   intersections: Intersection[];
   ways: Way[];
   buildings: Building[];
-  persons: Person[];
   height: number;
   width: number;
 
@@ -17,7 +15,6 @@ export default class Map {
     this.intersections = intersections;
     this.ways = ways;
     this.buildings = [];
-    this.persons = [];
   }
 
   getHeight(): number {
@@ -42,13 +39,5 @@ export default class Map {
 
   addBuilding(building: Building) {
     this.buildings.push(building);
-  }
-
-  getPersons() : Person[] {
-    return this.persons;
-  }
-
-  addPerson(person: Person) {
-    this.persons.push(person);
   }
 }
