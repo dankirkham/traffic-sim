@@ -1,10 +1,10 @@
 // Generates a grid city
 
-import Building from "../elements/building";
-import Point from "../elements/point";
-import Way from "../elements/way";
-import Intersection from "../elements/intersection";
-import Map from "../elements/map";
+import Building from "../../elements/building";
+import Point from "../../elements/point";
+import Way from "../../elements/way";
+import Intersection from "../../elements/intersection";
+import Map from "../../elements/map";
 import MapGenerator from "./mapGenerator"
 import MapGeneratorConfig from "./mapGeneratorConfig"
 

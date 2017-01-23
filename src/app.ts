@@ -2,9 +2,9 @@ import Map from "./elements/map";
 import Person from "./elements/person";
 import Way from "./elements/way";
 import World from "./elements/world"
-import GridMapGenerator from "./gen/gridMapGenerator";
-import WebMapGenerator from "./gen/webMapGenerator";
-import MapGeneratorConfig from "./gen/mapGeneratorConfig";
+import GridMapGenerator from "./gen/map/gridMapGenerator";
+import WebMapGenerator from "./gen/map/webMapGenerator";
+import MapGeneratorConfig from "./gen/map/mapGeneratorConfig";
 import CanvasGraphics from "./graphics/canvasGraphics";
 import WebGLGraphics from "./graphics/webGLGraphics";
 import Matrix from "./graphics/util/matrix";

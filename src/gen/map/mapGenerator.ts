@@ -1,15 +1,15 @@
-import Building from "../elements/building";
-import {BuildingType} from "../elements/buildingType";
-import Person from "../elements/person";
-import Point from "../elements/point";
-import Way from "../elements/way";
-import Intersection from "../elements/intersection";
-import Map from "../elements/map";
+import Building from "../../elements/building";
+import {BuildingType} from "../../elements/buildingType";
+import Person from "../../elements/person";
+import Point from "../../elements/point";
+import Way from "../../elements/way";
+import Intersection from "../../elements/intersection";
+import Map from "../../elements/map";
 import MapGeneratorConfig from "./mapGeneratorConfig"
-import NameGenerator from "./name/nameGenerator";
-import EarlyBird from "../sim/chronotype/earlyBird";
-import LateRiser from "../sim/chronotype/lateRiser";
-import Punctual from "../sim/chronotype/punctual";
+import NameGenerator from "../name/nameGenerator";
+import EarlyBird from "../../sim/chronotype/earlyBird";
+import LateRiser from "../../sim/chronotype/lateRiser";
+import Punctual from "../../sim/chronotype/punctual";
 
 export default class MapGenerator {
   static randomPoint(height: number, width: number): Point {
