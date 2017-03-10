@@ -1,7 +1,7 @@
 import Matrix from "../util/matrix";
 import Vector from "../util/vector";
 
-export default class Mesh {
+abstract class Mesh {
   protected offset: number;
   protected vertices: number[];
   protected colors: number[];
@@ -37,9 +37,7 @@ export default class Mesh {
     return this;
   }
 
-  public render(gl : WebGLRenderingContext): void {
-    console.error('Typescript is quirky. "export default abstract class" is not allowed. So this function can not be absract.');
-  };
+  public abstract render(gl : WebGLRenderingContext): void;
 
   public getVertices(): number[] {
     return this.vertices;
@@ -49,3 +47,5 @@ export default class Mesh {
     return this.colors;
   }
 }
+
+export default Mesh;
