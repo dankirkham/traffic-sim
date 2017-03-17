@@ -6,7 +6,7 @@ var pump = require('pump');
 
 gulp.task('default', ['build']);
 
-gulp.task('build', ['build-js', 'minify-html']);
+gulp.task('build', ['build-js', 'minify-html', 'build-testing']);
 
 gulp.task('build-js', function (cb) {
   pump([
@@ -22,4 +22,10 @@ gulp.task('minify-html', function (cb) {
     htmlmin({ collapseWhitespace: true }),
     gulp.dest('dist/')
   ], cb);
+});
+
+gulp.task('build-testing', function(){
+  gulp.src(['src/**/*.ts'])
+    .pipe(tsc({module:'amd'}))
+    .pipe(gulp.dest('build_test/'))
 });

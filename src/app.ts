@@ -37,9 +37,3 @@ function clockTick() {
 }
 
 setInterval(clockTick, 417);
-
-console.log('wtf');
-
-// DEBUG TESTING PathingAlgorithm
-let algo: ManhattanPathingAlgorithm = new ManhattanPathingAlgorithm();
-console.log(algo.generatePath(world.getPersons()[0], world.getMap(), SchedulerEventType.HomeToWork));
