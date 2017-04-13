@@ -27,6 +27,14 @@ export default class Way {
     }
   }
 
+  // True if way "distance" increases in the direction to the intersection, false if it is decreasing.
+  getDirectionToIntersection(intersection: Intersection): boolean {
+    if (!intersection)
+      console.error('Way.getDirectionToIntersection() called with null Intersection!');
+
+    return this.getIntersection(1) === intersection;
+  }
+
   private sqr(x: number): number {
     return x * x;
   }

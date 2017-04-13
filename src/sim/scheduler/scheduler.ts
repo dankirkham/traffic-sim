@@ -8,6 +8,10 @@ import Person from "../../elements/person";
 import ArrayUtils from "../../util/arrayUtils";
 import Map from '../../elements/map';
 import Intersection from '../../elements/intersection';
+import World from '../../elements/world';
+import Building from '../../elements/building';
+import Way from '../../elements/way';
+import Car from '../../elements/car';
 
 export default class Scheduler {
   private events: SchedulerEvent[];
@@ -54,7 +58,7 @@ export default class Scheduler {
     ArrayUtils.insert(event, this.events, SchedulerEvent.compare);
   }
 
-  tick(time: number, map: Map): void {
+  tick(time: number, world: World): void {
     // console.log('scheduler.tick() called for time ' + time + '; event count = ' + this.events.length);
 
     for (var i = this.events.length - 1; i >= 0; i--) {
@@ -64,11 +68,24 @@ export default class Scheduler {
         let person: Person = event.getPerson();
         // console.log('Scheduling ' + person.getName());
 
-        let path: Intersection[] = person.getPathingAlgorithm().generatePath(person, map, event.getType());
+        // Generate path
+        let path: Intersection[] = person.getPathingAlgorithm().generatePath(person, world.getMap(), event.getType());
 
-        person.setPath(path);
+        // Find destination building and starting way
+        let destination: Building;
+        let startingWay: Way;
 
-        // TODO: Spawn car
+        if (event.getType() == SchedulerEventType.HomeToWork) {
+          destination = person.getWork();
+          startingWay = person.getHome().getWay();
+        } else {
+          destination = person.getHome();
+          startingWay = person.getWork().getWay();
+        }
+
+        // Create car
+        let car: Car = new Car(person, path, destination, startingWay);
+        world.getCars().push(car);
 
         // Reschedule person
         if (event.getType() == SchedulerEventType.HomeToWork) {
@@ -77,11 +94,12 @@ export default class Scheduler {
           this.schedule(person, SchedulerEventType.HomeToWork);
         }
 
+        // Delete this event
         this.events.splice(i, 1);
       }
     }
 
-
+    // TODO: Is lastTime used?
     this.lastTime = time;
   }
 

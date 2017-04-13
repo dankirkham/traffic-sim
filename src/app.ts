@@ -4,6 +4,7 @@ import CanvasGraphics from "./graphics/canvasGraphics";
 import WebGLGraphics from "./graphics/webGLGraphics";
 import Clock from "./sim/clock";
 import Scheduler from './sim/scheduler/scheduler';
+import Traffic from './sim/traffic';
 
 let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
@@ -27,7 +28,7 @@ function cameraTick() {
 
 setInterval(cameraTick, 10);
 
-// Clock and Scheduler
+// Clock
 let clock: Clock = new Clock();
 
 function clockTick() {
@@ -36,11 +37,21 @@ function clockTick() {
 
 setInterval(clockTick, 417);
 
+// Scheduler
 let scheduler: Scheduler = new Scheduler();
 scheduler.init(world.getPersons());
 
 function schedulerTick() {
-  scheduler.tick(clock.getTime(), world.getMap());
+  scheduler.tick(clock.getTime(), world);
 }
 
 setInterval(schedulerTick, 417);
+
+// Traffic
+let traffic: Traffic = new Traffic(world);
+
+function trafficTick() {
+  traffic.tick();
+}
+
+setInterval(trafficTick, 30);

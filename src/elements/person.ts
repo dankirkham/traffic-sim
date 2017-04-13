@@ -9,7 +9,6 @@ export default class Person {
   private work: Building;
   private chronotype: typeof Chronotype;
   private pathingAlgorithm: PathingAlgorithm;
-  private path: Intersection[];
 
   constructor(name: string) {
     this.name = name;
@@ -49,14 +48,6 @@ export default class Person {
 
   public setPathingAlgorithm(pathingAlgorithm: PathingAlgorithm) {
     this.pathingAlgorithm = pathingAlgorithm;
-  }
-
-  public getPath(): Intersection[] {
-    return this.path;
-  }
-
-  public setPath(path: Intersection[]) {
-    this.path = path;
   }
 
   public link(): void {

@@ -35,4 +35,14 @@ export default class Intersection {
 
     return false;
   }
+
+  getWayBetween(that: Intersection): Way {
+    for (let way of this.ways) {
+      if (way.isConnectedToIntersection(this) && way.isConnectedToIntersection(that)) {
+        return way;
+      }
+    }
+
+    return null;
+  }
 }
