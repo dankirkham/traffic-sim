@@ -84,7 +84,7 @@ export default class WebGLGraphics implements Graphics {
     this.gl.enableVertexAttribArray(this.aVertexColor);
   }
 
-  private buildMVMatrix(map: Map, camera: Camera): Matrix {
+  private buildMVMatrix(camera: Camera): Matrix {
     let cameraMatrix: Matrix = Matrix.translation(new Vector(-camera.getLocation().getX(), -camera.getLocation().getY(), 0, 1));
 
     let standUpMatrix: Matrix = Matrix.rotation('x', 90);
@@ -111,10 +111,9 @@ export default class WebGLGraphics implements Graphics {
   }
 
   draw(world: World) {
-    let map: Map = world.getMap();
     let camera: Camera = world.getCamera();
 
-    this.uMVMatrix = this.buildMVMatrix(map, camera);
+    this.uMVMatrix = this.buildMVMatrix(camera);
 
     this.setUniforms();
 
