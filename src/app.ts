@@ -3,9 +3,7 @@ import WorldGenerator from "./gen/worldGenerator";
 import CanvasGraphics from "./graphics/canvasGraphics";
 import WebGLGraphics from "./graphics/webGLGraphics";
 import Clock from "./sim/clock";
-// TODO: REMOVE these are just for testing
-import ManhattanPathingAlgorithm from "./sim/pathing/manhattanPathingAlgorithm";
-import SchedulerEventType from "./sim/scheduler/schedulerEventType";
+import Scheduler from './sim/scheduler/scheduler';
 
 let canvas: HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("mainCanvas");
 
@@ -37,3 +35,12 @@ function clockTick() {
 }
 
 setInterval(clockTick, 417);
+
+let scheduler: Scheduler = new Scheduler();
+scheduler.init(world.getPersons());
+
+function schedulerTick() {
+  scheduler.tick(clock.getTime(), world.getMap());
+}
+
+setInterval(schedulerTick, 417);

@@ -1,11 +1,15 @@
 import Building from "./building";
 import Chronotype from "../sim/chronotype/chronotype";
+import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
+import Intersection from './intersection';
 
 export default class Person {
   private name: string;
   private home: Building;
   private work: Building;
   private chronotype: typeof Chronotype;
+  private pathingAlgorithm: PathingAlgorithm;
+  private path: Intersection[];
 
   constructor(name: string) {
     this.name = name;
@@ -37,6 +41,22 @@ export default class Person {
 
   public setChronotype(chronotype: typeof Chronotype) {
     this.chronotype = chronotype;
+  }
+
+  public getPathingAlgorithm(): PathingAlgorithm {
+    return this.pathingAlgorithm;
+  }
+
+  public setPathingAlgorithm(pathingAlgorithm: PathingAlgorithm) {
+    this.pathingAlgorithm = pathingAlgorithm;
+  }
+
+  public getPath(): Intersection[] {
+    return this.path;
+  }
+
+  public setPath(path: Intersection[]) {
+    this.path = path;
   }
 
   public link(): void {

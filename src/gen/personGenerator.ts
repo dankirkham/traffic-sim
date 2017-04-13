@@ -7,6 +7,8 @@ import Punctual from "../sim/chronotype/punctual";
 import Building from "../elements/building";
 import {BuildingType} from "../elements/buildingType";
 import Person from "../elements/person";
+import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
+import ManhattanPathingAlgorithm from '../sim/pathing/manhattanPathingAlgorithm';
 
 export default class PersonGenerator {
   private static generateChronotype(): typeof Chronotype {
@@ -23,12 +25,17 @@ export default class PersonGenerator {
     }
   }
 
+  private static generatePathingAlgorithm(): PathingAlgorithm {
+    return new ManhattanPathingAlgorithm();
+  }
+
   private static generatePerson(home: Building, work: Building, world: World): void {
     let person: Person = new Person(NameGenerator.generate());
 
     person.setHome(home);
     person.setWork(work);
     person.setChronotype(PersonGenerator.generateChronotype());
+    person.setPathingAlgorithm(PersonGenerator.generatePathingAlgorithm());
 
     // Link home and work buildings back to the person.
     person.link();
