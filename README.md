@@ -12,5 +12,7 @@ npm install
 gulp
 ```
 
+Open `dist/index.html` in browser.
+
 ## Acknowledgements
 Citizen name generation algorithm comes from [jacob-swanson/kerbonaut-naming](https://github.com/jacob-swanson/kerbonaut-naming).
