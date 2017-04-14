@@ -39,6 +39,11 @@ export default class GridMapGenerator extends MapGenerator {
       }
     }
 
+    // Link ways
+    for (let way of ways) {
+      way.link();
+    }
+
     let map = new Map(config.height, config.width, intersections, ways);
 
     // Generate buildings
