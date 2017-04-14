@@ -1,53 +1,17 @@
-import Building from "../../elements/building";
-import Point from "../../elements/point";
-import Map from "../../elements/map";
-import Way from "../../elements/way"
-import Mesh from "../meshes/mesh";
-import AxisMesh from "../meshes/axisMesh";
-import BuildingMesh from "../meshes/buildingMesh";
-import GrassMesh from "../meshes/grassMesh";
-import RoadMesh from "../meshes/roadMesh";
-import Matrix from "./matrix";
-import Vector from "./vector";
+import Mesh from '../meshes/mesh';
+import World from '../../elements/world';
 
-export default class Buffer {
-  private vertices: number[];
-  private colors: number[];
-  private meshes: Mesh[];
+abstract class Buffer {
+  protected vertices: number[];
+  protected colors: number[];
+  protected meshes: Mesh[];
+
+  abstract build(world: World): void;
 
   constructor() {
     this.vertices = [];
     this.colors = [];
     this.meshes = [];
-  }
-
-  public build(map: Map): void {
-    // Axis coordinates
-    let axis: AxisMesh = new AxisMesh(this.vertices.length);
-    this.pushMesh(axis);
-
-    // GrassMesh
-    let grassMesh: GrassMesh = new GrassMesh(this.vertices.length, map);
-    this.pushMesh(grassMesh);
-
-    // BuildingMesh
-    for (let building of map.getBuildings()) {
-      let mesh: BuildingMesh = new BuildingMesh(this.vertices.length, building.getType());
-
-      mesh.multiplyByMatrix(Matrix.scale(20));
-
-      mesh.multiplyByMatrix(Matrix.rotation('z', -building.getWay().getHeading()));
-
-      let location: Point = building.getLocation();
-      mesh.multiplyByMatrix(Matrix.translation(new Vector(location.getX(), location.getY(), 0, 1)));
-
-      this.pushMesh(mesh);
-    }
-
-    for (let way of map.getWays()) {
-      let roadMesh: RoadMesh = new RoadMesh(this.vertices.length, way);
-      this.pushMesh(roadMesh);
-    }
   }
 
   public bind(gl: WebGLRenderingContext, aVertexPosition, aVertexColor): void {
@@ -69,22 +33,24 @@ export default class Buffer {
     }
   }
 
-  private pushMesh(mesh: Mesh) {
+  protected pushMesh(mesh: Mesh) {
     this.vertices = this.vertices.concat(mesh.getVertices());
     this.colors = this.colors.concat(mesh.getColors());
 
     this.meshes.push(mesh);
   }
 
-  public getVertices() {
+  public getVertices(): number[] {
     return this.vertices;
   }
 
-  public getColors() {
+  public getColors(): number[] {
     return this.colors;
   }
 
-  public getMeshes() {
+  public getMeshes(): Mesh[] {
     return this.meshes;
   }
 }
+
+export default Buffer;

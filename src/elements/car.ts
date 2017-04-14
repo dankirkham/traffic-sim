@@ -4,7 +4,7 @@ import Building from './building';
 import Way from './way';
 
 export default class Car {
-  public static TARGET_DISTANCE = 0.1;
+  public static TARGET_DISTANCE = 0.03;
   public static DISTANCE_PER_TICK = 0.02;
 
   private person: Person;
@@ -20,9 +20,13 @@ export default class Car {
   private arrived: boolean;
 
   private checkArrivedAtDestination(): boolean {
-    if (this.destination.getWay() == this.way &&
-        this.destination.getDistance() >= this.wayPosition - Car.TARGET_DISTANCE &&
-        this.destination.getDistance() <= this.wayPosition + Car.TARGET_DISTANCE) {
+    // if (this.destination.getWay() === this.way) {
+    //   console.log('A car is on the same way as it\'s destination.')
+    // }
+
+    if (this.destination.getWay() === this.way &&
+        this.wayPosition >= this.destination.getDistance() - Car.TARGET_DISTANCE &&
+        this.wayPosition <= this.destination.getDistance() + Car.TARGET_DISTANCE) {
           return true;
         }
 
@@ -57,16 +61,23 @@ export default class Car {
     // Move to next way with correct heading, distance, and direction.
 
     if (this.pathIndex + 1 >= this.path.length) {
-      // Path index out of range
-      console.error('Car has reached end of path without arriving at destination. Something has gone horribly wrong.');
-      return;
+      // Make way to the destination
+      if (!this.destination.getWay().isConnectedToIntersection(this.path[this.pathIndex])) {
+        console.error('A car has a bad path and cannot reach it\'s destination.');
+      } else {
+        this.way = this.destination.getWay();
+        // ! (not) is here because we are going *away* from the last intersection in the path.
+        this.wayDirectionPositive = !this.way.getDirectionToIntersection(this.path[this.pathIndex]);
+        this.wayPosition = this.wayDirectionPositive ? 0 : 1;
+      }
+    } else {
+      // Make way to the next intersection.
+      this.way = this.path[this.pathIndex].getWayBetween(this.path[this.pathIndex + 1]);
+      this.wayDirectionPositive = this.way.getDirectionToIntersection(this.path[this.pathIndex + 1]);
+      this.wayPosition = this.wayDirectionPositive ? 0 : 1;
+
+      this.pathIndex += 1; // Point to next intersection
     }
-
-    this.way = this.path[this.pathIndex].getWayBetween(this.path[this.pathIndex + 1]);
-    this.wayDirectionPositive = this.way.getDirectionToIntersection(this.path[this.pathIndex + 1]);
-    this.wayPosition = this.wayDirectionPositive ? 0 : 1;
-
-    this.pathIndex += 1; // Point to next intersection
   }
 
   constructor(person: Person, path: Intersection[], destination: Building, startingWay: Way) {
@@ -81,6 +92,10 @@ export default class Car {
     this.pathIndex = 0;
 
     this.arrived = false;
+
+    if (this.way === this.destination.getWay()) {
+      console.log('A car has started on the same way as it\'s destination.');
+    }
   }
 
   move() {
@@ -89,6 +104,7 @@ export default class Car {
 
     if (this.checkArrivedAtDestination()) {
       this.arrived = true;
+      console.log('A car has arrived at its destination.');
       return;
     }
 
@@ -101,5 +117,13 @@ export default class Car {
 
   getArrived(): boolean {
     return this.arrived;
+  }
+
+  getWay(): Way {
+    return this.way;
+  }
+
+  getWayPosition(): number {
+    return this.wayPosition;
   }
 }

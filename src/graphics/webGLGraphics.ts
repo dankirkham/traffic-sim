@@ -1,14 +1,14 @@
 import Building from "../elements/building";
 import Intersection from "../elements/intersection";
-import Map from "../elements/map";
 import Point from "../elements/point";
 import Way from "../elements/way";
 import World from "../elements/world";
 import Matrix from "./util/matrix";
 import Vector from "./util/vector";
-import Buffer from "./util/buffer";
 import Camera from "../sim/camera";
 import Graphics from "./graphics";
+import StaticBuffer from './util/staticBuffer';
+import DynamicBuffer from './util/dynamicBuffer';
 
 export default class WebGLGraphics implements Graphics {
   private static FRAGMENT_SHADER_SOURCE: string =
@@ -35,7 +35,7 @@ export default class WebGLGraphics implements Graphics {
   private uPMatrix: Matrix;
   private aVertexPosition;
   private aVertexColor;
-  private staticBuffer: Buffer;
+  private staticBuffer: StaticBuffer;
 
   private initWebGL(canvas: HTMLCanvasElement): WebGLRenderingContext {
     let gl: WebGLRenderingContext = undefined;
@@ -111,6 +111,10 @@ export default class WebGLGraphics implements Graphics {
   }
 
   draw(world: World) {
+    // Build dynamic buffer
+    let dynamicBuffer: DynamicBuffer = new DynamicBuffer();
+    dynamicBuffer.build(world);
+
     let camera: Camera = world.getCamera();
 
     this.uMVMatrix = this.buildMVMatrix(camera);
@@ -131,9 +135,12 @@ export default class WebGLGraphics implements Graphics {
 
     this.staticBuffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
     this.staticBuffer.render(this.gl);
+
+    dynamicBuffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
+    dynamicBuffer.render(this.gl);
   }
 
-  constructor(canvas: HTMLCanvasElement, map: Map) {
+  constructor(canvas: HTMLCanvasElement, world: World) {
     this.canvas = canvas;
 
     this.gl = this.initWebGL(canvas);
@@ -145,7 +152,7 @@ export default class WebGLGraphics implements Graphics {
 
     this.uPMatrix = this.buildPMatrix();
 
-    this.staticBuffer = new Buffer();
-    this.staticBuffer.build(map);
+    this.staticBuffer = new StaticBuffer();
+    this.staticBuffer.build(world);
   }
 }

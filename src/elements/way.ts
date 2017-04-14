@@ -79,6 +79,8 @@ export default class Way {
     return v.getDistance(pointOnWay) / v.getDistance(w);
   }
 
+  // Distance: 0 <= address <= 1
+  // Returns map coordinate of distance on way
   getLocationOfAddress(address: number): Point {
     let v: Point = this.getIntersection(0).getLocation();
     let w: Point = this.getIntersection(1).getLocation();
