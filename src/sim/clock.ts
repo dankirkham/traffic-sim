@@ -1,7 +1,7 @@
 export default class Clock {
   private time: number;
   public static MinutesPerDay: number = 1440;
-  public static DefaultStartTime: number = 360;
+  public static DefaultStartTime: number = 410;
 
   constructor() {
     this.time = Clock.DefaultStartTime;
