@@ -3,6 +3,7 @@ import Camera from "../sim/camera";
 import Person from "./person";
 import Scheduler from "../sim/scheduler/scheduler";
 import Car from './car';
+import Clock from '../sim/clock';
 
 export default class World {
   private map: Map;
@@ -10,6 +11,7 @@ export default class World {
   private scheduler: Scheduler;
   private persons: Person[];
   private cars: Car[];
+  private clock: Clock;
 
   constructor() {
     this.persons = [];
@@ -50,5 +52,13 @@ export default class World {
 
   getCars(): Car[] {
     return this.cars;
+  }
+
+  getClock(): Clock {
+    return this.clock;
+  }
+
+  setClock(clock: Clock) {
+    this.clock = clock;
   }
 }

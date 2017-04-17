@@ -2,6 +2,7 @@ import Intersection from './intersection';
 import Person from './person';
 import Building from './building';
 import Way from './way';
+import { CarColor } from './carColor';
 
 export default class Car {
   public static TARGET_DISTANCE = 0.03;
@@ -104,7 +105,7 @@ export default class Car {
 
     if (this.checkArrivedAtDestination()) {
       this.arrived = true;
-      console.log('A car has arrived at its destination.');
+      // console.log('A car has arrived at its destination.');
       return;
     }
 
@@ -125,5 +126,9 @@ export default class Car {
 
   getWayPosition(): number {
     return this.wayPosition;
+  }
+
+  getPerson(): Person {
+    return this.person;
   }
 }

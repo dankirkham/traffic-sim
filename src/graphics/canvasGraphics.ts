@@ -5,6 +5,7 @@ import Point from "../elements/point";
 import Way from "../elements/way";
 import World from "../elements/world";
 import Graphics from "./graphics";
+import Car from '../elements/car';
 
 export default class CanvasGraphics implements Graphics {
   private scale: number;
@@ -90,6 +91,29 @@ private drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], 
     }
   }
 
+  private drawCars(context: CanvasRenderingContext2D, cars: Car[], scale: number) {
+    let id = context.createImageData(1, 1);
+    let d = id.data;
+    d[0] = 255;
+    d[2] = 255;
+    d[3] = 255;
+
+    for (let car of cars) {
+      let carLocation: Point = car.getWay().getLocationOfAddress(car.getWayPosition());
+
+      let x: number = carLocation.getX();
+      let y: number = carLocation.getY();
+
+      context.putImageData(id, x * scale, y * scale);
+
+      context.putImageData(id, x * scale + 1, y * scale);
+      context.putImageData(id, x * scale - 1, y * scale);
+
+      context.putImageData(id, x * scale, y * scale + 1);
+      context.putImageData(id, x * scale, y * scale - 1);
+    }
+  }
+
   draw(world: World) {
     let context: CanvasRenderingContext2D = this.canvas.getContext("2d");
 
@@ -100,6 +124,8 @@ private drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], 
     this.drawIntersections(context, map.getIntersections(), this.scale);
 
     this.drawBuildings(context, map.getBuildings(), this.scale)
+
+    this.drawCars(context, world.getCars(), this.scale);
   }
 
   constructor(canvas: HTMLCanvasElement, scale: number) {

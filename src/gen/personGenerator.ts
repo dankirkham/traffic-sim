@@ -9,10 +9,10 @@ import {BuildingType} from "../elements/buildingType";
 import Person from "../elements/person";
 import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
 import ManhattanPathingAlgorithm from '../sim/pathing/manhattanPathingAlgorithm';
+import { CarColor } from '../elements/carColor';
 
 export default class PersonGenerator {
   private static generateChronotype(): typeof Chronotype {
-    // TODO: Abstract this mess.
     let rng: number = Math.floor(Math.random() * 3);
 
     switch (rng) {
@@ -29,6 +29,31 @@ export default class PersonGenerator {
     return new ManhattanPathingAlgorithm();
   }
 
+  private static generateCarColor(): CarColor {
+    let rng: number = Math.floor(Math.random() * 9);
+
+    switch (rng) {
+      case 0:
+        return CarColor.Purple;
+      case 1:
+        return CarColor.Yellow;
+      case 2:
+        return CarColor.White;
+      case 3:
+        return CarColor.Black;
+      case 4:
+        return CarColor.Orange;
+      case 5:
+        return CarColor.Brown;
+      case 6:
+        return CarColor.Green;
+      case 7:
+        return CarColor.Blue;
+      default:
+        return CarColor.Red;
+    }
+  }
+
   private static generatePerson(home: Building, work: Building, world: World): void {
     let person: Person = new Person(NameGenerator.generate());
 
@@ -36,6 +61,7 @@ export default class PersonGenerator {
     person.setWork(work);
     person.setChronotype(PersonGenerator.generateChronotype());
     person.setPathingAlgorithm(PersonGenerator.generatePathingAlgorithm());
+    person.setCarColor(PersonGenerator.generateCarColor());
 
     // Link home and work buildings back to the person.
     person.link();

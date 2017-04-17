@@ -2,6 +2,7 @@ import Building from "./building";
 import Chronotype from "../sim/chronotype/chronotype";
 import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
 import Intersection from './intersection';
+import { CarColor } from './carColor';
 
 export default class Person {
   private name: string;
@@ -9,6 +10,7 @@ export default class Person {
   private work: Building;
   private chronotype: typeof Chronotype;
   private pathingAlgorithm: PathingAlgorithm;
+  private carColor: CarColor;
 
   constructor(name: string) {
     this.name = name;
@@ -48,6 +50,14 @@ export default class Person {
 
   public setPathingAlgorithm(pathingAlgorithm: PathingAlgorithm) {
     this.pathingAlgorithm = pathingAlgorithm;
+  }
+
+  public getCarColor(): CarColor {
+    return this.carColor;
+  }
+
+  public setCarColor(carColor: CarColor) {
+    this.carColor = carColor;
   }
 
   public link(): void {

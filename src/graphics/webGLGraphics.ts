@@ -111,7 +111,6 @@ export default class WebGLGraphics implements Graphics {
   }
 
   draw(world: World) {
-    // Build dynamic buffer
     let dynamicBuffer: DynamicBuffer = new DynamicBuffer();
     dynamicBuffer.build(world);
 
@@ -138,6 +137,8 @@ export default class WebGLGraphics implements Graphics {
 
     dynamicBuffer.bind(this.gl, this.aVertexPosition, this.aVertexColor);
     dynamicBuffer.render(this.gl);
+
+    console.log('Car/Person ratio: ' + world.getCars().length / world.getPersons().length + '; Time: ' + world.getClock().toString());
   }
 
   constructor(canvas: HTMLCanvasElement, world: World) {

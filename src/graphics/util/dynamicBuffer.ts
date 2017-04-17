@@ -8,7 +8,7 @@ import Vector from './vector';
 export default class DynamicBuffer extends Buffer {
   public build(world: World): void {
     for (let car of world.getCars()) {
-      let mesh: CarMesh = new CarMesh(this.vertices.length);
+      let mesh: CarMesh = new CarMesh(this.vertices.length, car.getPerson().getCarColor());
 
       mesh.multiplyByMatrix(Matrix.scale(10));
 

@@ -14,7 +14,7 @@ canvas.height = window.innerHeight - 20;
 let world: World = WorldGenerator.generate(canvas);
 
 let graphics: WebGLGraphics = new WebGLGraphics(canvas, world);
-// let graphics: CanvasGraphics = new CanvasGraphics(canvas, 1);
+// let graphics: CanvasGraphics = new CanvasGraphics(canvas, 1.0);
 
 function graphicsTick() {
   graphics.draw(world);
@@ -36,6 +36,9 @@ function clockTick() {
 }
 
 setInterval(clockTick, 417);
+
+// TODO: All the clock stuff might need to go into the world generator...
+world.setClock(clock);
 
 // Scheduler
 let scheduler: Scheduler = new Scheduler();
