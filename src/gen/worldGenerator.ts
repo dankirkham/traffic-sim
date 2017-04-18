@@ -27,12 +27,10 @@ export default class WorldGenerator {
     let scheduler: Scheduler = new Scheduler();
     world.setScheduler(scheduler);
 
-    for (let person of world.getPersons()) {
-      scheduler.schedule(person, SchedulerEventType.HomeToWork);
-    }
+    scheduler.init(world.getPersons());
 
     // TODO: This is a sample of the getElementsBetween function.
-    ArrayUtils.getElementsBetween(450, 510, scheduler.getEvents(), SchedulerEvent.valueOf);
+    // ArrayUtils.getElementsBetween(450, 510, scheduler.getEvents(), SchedulerEvent.valueOf);
   }
 
   private static initializeCamera(world: World): void {

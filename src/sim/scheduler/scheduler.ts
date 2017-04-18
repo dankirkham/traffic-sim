@@ -35,11 +35,11 @@ export default class Scheduler {
   init(persons: Person[]) {
     // Schedules every person to leave for work
     for (let person of persons) {
-      this.schedule(person, SchedulerEventType.HomeToWork);
+      this.schedule(person, SchedulerEventType.HomeToWork, false);
     }
   }
 
-  schedule(person: Person, schedulerEventType: SchedulerEventType) {
+  schedule(person: Person, schedulerEventType: SchedulerEventType, nextDay: boolean) {
     let minute: number;
 
     if (person.getChronotype() == EarlyBird) {
@@ -53,18 +53,25 @@ export default class Scheduler {
     // TODO: I would much rather do it this way. Perhaps this can be done by making Chronotype and interface and not a class.
     // minute = person.getChronotype().getLeaveTime(schedulerEventType);
 
-    let event: SchedulerEvent = new SchedulerEvent(person, minute, schedulerEventType);
+    let event: SchedulerEvent = new SchedulerEvent(person, minute, schedulerEventType, nextDay);
 
     ArrayUtils.insert(event, this.events, SchedulerEvent.compare);
   }
 
   tick(time: number, world: World): void {
     // console.log('scheduler.tick() called for time ' + time + '; event count = ' + this.events.length);
+    if (time < this.lastTime) {
+      // New day
+      for (let event of this.events) {
+        event.setNextDay(false);
+      }
+    }
+
 
     for (var i = this.events.length - 1; i >= 0; i--) {
       let event: SchedulerEvent = this.events[i];
 
-      if (this.events[i].getMinute() <= time) {
+      if (!event.getNextDay() && event.getMinute() > this.lastTime && event.getMinute() <= time) {
         let person: Person = event.getPerson();
         // console.log('Scheduling ' + person.getName());
 
@@ -89,9 +96,9 @@ export default class Scheduler {
 
         // Reschedule person
         if (event.getType() == SchedulerEventType.HomeToWork) {
-          this.schedule(person, SchedulerEventType.WorkToHome);
+          this.schedule(person, SchedulerEventType.WorkToHome, false);
         } else {
-          this.schedule(person, SchedulerEventType.HomeToWork);
+          this.schedule(person, SchedulerEventType.HomeToWork, true);
         }
 
         // Delete this event

@@ -41,8 +41,7 @@ setInterval(clockTick, 417);
 world.setClock(clock);
 
 // Scheduler
-let scheduler: Scheduler = new Scheduler();
-scheduler.init(world.getPersons());
+let scheduler: Scheduler = world.getScheduler();
 
 function schedulerTick() {
   scheduler.tick(clock.getTime(), world);
