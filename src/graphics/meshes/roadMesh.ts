@@ -26,10 +26,10 @@ export default class RoadMesh extends Mesh {
                                   intersection1.getY() - roadHalfWidth * Math.sin(heading));
 
     this.vertices = [
-      pointC.getX(), pointC.getY(), 1, 1,
-      pointB.getX(), pointB.getY(), 1, 1,
-      pointD.getX(), pointD.getY(), 1, 1,
-      pointA.getX(), pointA.getY(), 1, 1,
+      pointC.getX(), pointC.getY(), 0.01, 1,
+      pointB.getX(), pointB.getY(), 0.01, 1,
+      pointD.getX(), pointD.getY(), 0.01, 1,
+      pointA.getX(), pointA.getY(), 0.01, 1,
     ];
 
     this.colors = [
