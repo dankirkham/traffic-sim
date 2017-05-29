@@ -128,6 +128,10 @@ export default class Car {
     return this.wayPosition;
   }
 
+  getWayDirectionPositive(): boolean {
+    return this.wayDirectionPositive;
+  }
+
   getPerson(): Person {
     return this.person;
   }
