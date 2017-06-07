@@ -6,7 +6,7 @@ import { CarColor } from './carColor';
 
 export default class Car {
   public static TARGET_DISTANCE = 0.03;
-  public static DISTANCE_PER_TICK = 0.02;
+  public static SPEED = 1;
 
   private person: Person;
   private path: Intersection[];
@@ -25,6 +25,8 @@ export default class Car {
     //   console.log('A car is on the same way as it\'s destination.')
     // }
 
+    // TODO: This gets tightened up. Check using wayDirectionPositive so that
+    // the TARGET_DISTANCE window cannot be skipped.
     if (this.destination.getWay() === this.way &&
         this.wayPosition >= this.destination.getDistance() - Car.TARGET_DISTANCE &&
         this.wayPosition <= this.destination.getDistance() + Car.TARGET_DISTANCE) {
@@ -43,14 +45,18 @@ export default class Car {
   }
 
   private advanceCar() {
+    // Scale car displacement based on length of way.
+    let displacement: number = Car.SPEED / this.way.getLength();
+
+    // Move the car, bounding it on [0, 1]
     if (this.wayDirectionPositive) {
-      this.wayPosition += Car.DISTANCE_PER_TICK;
+      this.wayPosition += displacement;
 
       if (this.wayPosition > 1) {
         this.wayPosition = 1;
       }
     } else {
-      this.wayPosition -= Car.DISTANCE_PER_TICK;
+      this.wayPosition -= displacement;
 
       if (this.wayPosition < 0) {
         this.wayPosition = 0;

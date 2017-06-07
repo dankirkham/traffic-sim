@@ -43,6 +43,15 @@ export default class Way {
     return this.sqr(v.getX() - w.getX()) + this.sqr(v.getY() - w.getY());
   }
 
+  // Length of the way.
+  getLength(): number {
+    let v: Point = this.getIntersection(0).getLocation();
+    let w: Point = this.getIntersection(1).getLocation();
+
+    return v.getDistance(w);
+  }
+
+  // Distance from a specific point
   getDistance(p: Point): number {
     let v: Point = this.getIntersection(0).getLocation();
     let w: Point = this.getIntersection(1).getLocation();
