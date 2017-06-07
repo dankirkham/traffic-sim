@@ -5,7 +5,7 @@ import Way from './way';
 import { CarColor } from './carColor';
 
 export default class Car {
-  public static TARGET_DISTANCE = 0.03;
+  public static TARGET_DISTANCE = 0.01;
   public static SPEED = 1;
 
   private person: Person;
@@ -25,13 +25,12 @@ export default class Car {
     //   console.log('A car is on the same way as it\'s destination.')
     // }
 
-    // TODO: This gets tightened up. Check using wayDirectionPositive so that
-    // the TARGET_DISTANCE window cannot be skipped.
-    if (this.destination.getWay() === this.way &&
-        this.wayPosition >= this.destination.getDistance() - Car.TARGET_DISTANCE &&
-        this.wayPosition <= this.destination.getDistance() + Car.TARGET_DISTANCE) {
-          return true;
-        }
+    if (this.destination.getWay() === this.way) {
+      if (this.wayDirectionPositive)
+        return this.wayPosition >= this.destination.getDistance() - Car.TARGET_DISTANCE
+      else
+        return this.wayPosition <= this.destination.getDistance() + Car.TARGET_DISTANCE;
+    }
 
     return false;
   }
