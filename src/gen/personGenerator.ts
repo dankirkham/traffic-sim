@@ -10,6 +10,11 @@ import Person from "../elements/person";
 import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
 import ManhattanPathingAlgorithm from '../sim/pathing/manhattanPathingAlgorithm';
 import { CarColor } from '../elements/carColor';
+import DrivingProfile from '../sim/drivingProfile/drivingProfile';
+import Defensive from '../sim/drivingProfile/defensive';
+import Distracted from '../sim/drivingProfile/distracted';
+import Relaxed from '../sim/drivingProfile/relaxed';
+import Spirited from '../sim/drivingProfile/sprited';
 
 export default class PersonGenerator {
   private static generateChronotype(): typeof Chronotype {
@@ -22,6 +27,21 @@ export default class PersonGenerator {
         return LateRiser;
       default:
         return Punctual;
+    }
+  }
+
+  private static generateDrivingProfile(): typeof DrivingProfile {
+    let rng: number = Math.floor(Math.random() * 4);
+
+    switch (rng) {
+      case 0:
+        return Defensive;
+      case 1:
+        return Distracted;
+      case 2:
+        return Relaxed;
+      default:
+        return Spirited;
     }
   }
 
@@ -60,6 +80,7 @@ export default class PersonGenerator {
     person.setHome(home);
     person.setWork(work);
     person.setChronotype(PersonGenerator.generateChronotype());
+    person.setDrivingProfile(PersonGenerator.generateDrivingProfile());
     person.setPathingAlgorithm(PersonGenerator.generatePathingAlgorithm());
     person.setCarColor(PersonGenerator.generateCarColor());
 

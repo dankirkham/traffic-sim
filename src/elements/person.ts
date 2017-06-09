@@ -3,12 +3,14 @@ import Chronotype from "../sim/chronotype/chronotype";
 import PathingAlgorithm from '../sim/pathing/pathingAlgorithm';
 import Intersection from './intersection';
 import { CarColor } from './carColor';
+import DrivingProfile from '../sim/drivingProfile/drivingProfile';
 
 export default class Person {
   private name: string;
   private home: Building;
   private work: Building;
   private chronotype: typeof Chronotype;
+  private drivingProfile: typeof DrivingProfile;
   private pathingAlgorithm: PathingAlgorithm;
   private carColor: CarColor;
 
@@ -42,6 +44,14 @@ export default class Person {
 
   public setChronotype(chronotype: typeof Chronotype) {
     this.chronotype = chronotype;
+  }
+
+  public getDrivingProfile(): typeof DrivingProfile {
+    return this.drivingProfile;
+  }
+
+  public setDrivingProfile(drivingProfile: typeof DrivingProfile) {
+    this.drivingProfile = drivingProfile;
   }
 
   public getPathingAlgorithm(): PathingAlgorithm {
