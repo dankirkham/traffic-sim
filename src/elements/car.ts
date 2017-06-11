@@ -3,6 +3,7 @@ import Person from './person';
 import Building from './building';
 import Way from './way';
 import { CarColor } from './carColor';
+import { CarState } from './carState';
 
 export default class Car {
   public static TARGET_DISTANCE = 0.01;
@@ -20,7 +21,7 @@ export default class Car {
 
   private destination: Building;
 
-  private arrived: boolean;
+  private state: CarState;
 
   // Physics properties
   private speed: number = 0;
@@ -198,35 +199,48 @@ export default class Car {
 
     this.pathIndex = 0;
 
-    this.arrived = false;
+    this.state = CarState.Traveling;
 
     if (this.way === this.destination.getWay()) {
       console.log('A car has started on the same way as it\'s destination.');
     }
   }
 
+  advanceThroughIntersection(): void {
+    this.state = CarState.Traveling;
+    
+    this.moveToNextWay();
+  }
+
   move() {
-    if (this.arrived)
+    if (this.state == CarState.Arrived)
       return true;
 
     if (this.checkArrivedAtDestination()) {
       // Remove from way
       this.way.removeCar(this);
 
-      this.arrived = true;
+      this.state = CarState.Arrived;
       // console.log('A car has arrived at its destination.');
       return;
     }
 
     if (this.checkArrivedAtIntersection()) {
-      this.moveToNextWay();
+     if (this.state != CarState.Queued) {
+       // Queue at correct intersection
+       let intersection: Intersection = this.way.getIntersection(this.getWayDirectionPositive() ? 1 : 0);
+
+       intersection.addCarToQueue(this);
+
+       this.state = CarState.Queued;
+     }
     } else {
       this.advanceCar();
     }
   }
 
-  getArrived(): boolean {
-    return this.arrived;
+  getState(): CarState {
+    return this.state;
   }
 
   getWay(): Way {
