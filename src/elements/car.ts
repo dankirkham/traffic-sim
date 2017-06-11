@@ -6,7 +6,9 @@ import { CarColor } from './carColor';
 
 export default class Car {
   public static TARGET_DISTANCE = 0.01;
-  public static SPEED = 1;
+  public static MIN_FOLLOW_DISTANCE = 5;
+  public static MAX_ACCELERATION = 10;
+  public static MAX_SPEED = 1;
 
   private person: Person;
   private path: Intersection[];
@@ -19,6 +21,47 @@ export default class Car {
   private destination: Building;
 
   private arrived: boolean;
+
+  // Physics properties
+  private speed: number = 0;
+
+  // Removes car from old way before moving to new way
+  // TODO: Change to best practice getter
+  private changeWay(way: Way) {
+    if (this.way) {
+      this.way.removeCar(this);
+    }
+    this.way = way;
+    this.way.addCar(this);
+  }
+
+  // Get car in front of this car on the way
+  private getCarInFront(): Car {
+    let cars: Car[] = this.way.getCars();
+
+    let closestCar: Car = null;
+
+    for (let car of cars) {
+      // Not the same car, but going the same direction
+      if (car != this && car.getWayDirectionPositive() == this.getWayDirectionPositive()) {
+        if (this.getWayDirectionPositive()) {
+          if (car.getWayPosition() > this.getWayPosition()) {
+            if (!closestCar || closestCar.getWayPosition() > car.getWayPosition()) {
+              closestCar = car;
+            }
+          }
+        } else {
+          if (car.getWayPosition() < this.getWayPosition()) {
+            if (!closestCar || closestCar.getWayPosition() < car.getWayPosition()) {
+              closestCar = car;
+            }
+          }
+        }
+      }
+    }
+
+    return closestCar;
+  }
 
   private checkArrivedAtDestination(): boolean {
     // if (this.destination.getWay() === this.way) {
@@ -44,22 +87,77 @@ export default class Car {
   }
 
   private advanceCar() {
+    let targetSpeed: number;
+    let frontDistance: number;
+
+    // Get car in front of this one
+    let carInFront: Car = this.getCarInFront();
+
+    if (carInFront) {
+      // Maintain safe following distance
+      targetSpeed = carInFront.getSpeed();
+      frontDistance = Math.abs(carInFront.getWayPosition() - this.getWayPosition()) * this.way.getLength() - Car.MIN_FOLLOW_DISTANCE;
+
+      // if (frontDistance < 0) {
+      //   console.log('wtf');
+      //   // frontDistance = 0;
+      // }
+    } else {
+      // Slowly arrive at the intersection
+      targetSpeed = Car.MAX_SPEED;
+
+      if (this.getWayDirectionPositive()) {
+        frontDistance = (1 - this.getWayPosition()) * this.way.getLength();
+      } else {
+        frontDistance = this.getWayPosition() * this.way.getLength();
+      }
+    }
+
+    if (frontDistance < Car.MIN_FOLLOW_DISTANCE) {
+      if (frontDistance != 0) {
+        targetSpeed = targetSpeed * (frontDistance / Car.MIN_FOLLOW_DISTANCE);
+      } else {
+        targetSpeed = 0;
+      }
+    }
+
+    let acceleration: number = (targetSpeed - this.getSpeed()) / 10;
+
+    // Bound acceleration
+    if (acceleration > Car.MAX_ACCELERATION) {
+      acceleration = Car.MAX_ACCELERATION;
+    } else if (acceleration < -Car.MAX_ACCELERATION) {
+      console.log('acceleration upper bound');
+      acceleration = -Car.MAX_ACCELERATION;
+    }
+
+    // Accumulate speed
+    this.speed += acceleration;
+
+    // Bound speed
+    if (this.speed > Car.MAX_SPEED) {
+      this.speed = Car.MAX_SPEED;
+    }
+
+    if (this.speed == 0) {
+      console.log('Car with speed 0; frontDistance = ' + frontDistance + '; targetSpeed = ' + targetSpeed + '; acceleration = ' + acceleration);
+    }
+
     // Scale car displacement based on length of way.
-    let displacement: number = Car.SPEED / this.way.getLength();
+    let displacement: number = this.getSpeed() / this.way.getLength();
 
     // Move the car, bounding it on [0, 1]
     if (this.wayDirectionPositive) {
       this.wayPosition += displacement;
-
-      if (this.wayPosition > 1) {
-        this.wayPosition = 1;
-      }
     } else {
       this.wayPosition -= displacement;
+    }
 
-      if (this.wayPosition < 0) {
-        this.wayPosition = 0;
-      }
+    // Bound position
+    if (this.wayPosition > 1) {
+      this.wayPosition = 1;
+    } else if (this.wayPosition < 0) {
+      this.wayPosition = 0;
     }
   }
 
@@ -71,14 +169,16 @@ export default class Car {
       if (!this.destination.getWay().isConnectedToIntersection(this.path[this.pathIndex])) {
         console.error('A car has a bad path and cannot reach it\'s destination.');
       } else {
-        this.way = this.destination.getWay();
+        this.changeWay(this.destination.getWay());
+
         // ! (not) is here because we are going *away* from the last intersection in the path.
         this.wayDirectionPositive = !this.way.getDirectionToIntersection(this.path[this.pathIndex]);
         this.wayPosition = this.wayDirectionPositive ? 0 : 1;
       }
     } else {
       // Make way to the next intersection.
-      this.way = this.path[this.pathIndex].getWayBetween(this.path[this.pathIndex + 1]);
+      this.changeWay(this.path[this.pathIndex].getWayBetween(this.path[this.pathIndex + 1]));
+
       this.wayDirectionPositive = this.way.getDirectionToIntersection(this.path[this.pathIndex + 1]);
       this.wayPosition = this.wayDirectionPositive ? 0 : 1;
 
@@ -91,7 +191,8 @@ export default class Car {
     this.path = path;
     this.destination = destination;
 
-    this.way = startingWay;
+    this.changeWay(startingWay);
+
     this.wayPosition = this.destination.getDistance();
     this.wayDirectionPositive = this.way.getDirectionToIntersection(this.path.length >= 1 ? this.path[0] : null);
 
@@ -109,6 +210,9 @@ export default class Car {
       return true;
 
     if (this.checkArrivedAtDestination()) {
+      // Remove from way
+      this.way.removeCar(this);
+
       this.arrived = true;
       // console.log('A car has arrived at its destination.');
       return;
@@ -139,5 +243,9 @@ export default class Car {
 
   getPerson(): Person {
     return this.person;
+  }
+
+  getSpeed(): number {
+    return this.speed;
   }
 }

@@ -1,14 +1,17 @@
 import Building from "./building";
 import Intersection from "./intersection";
 import Point from "./point";
+import Car from "./car";
 
 export default class Way {
   protected intersections: Intersection[];
   protected buildings: Building[];
+  protected cars: Car[];
 
   constructor(intersection0: Intersection, intersection1: Intersection) {
     this.intersections = new Array();
     this.buildings = [];
+    this.cars = [];
 
     this.setIntersection(0, intersection0);
     this.setIntersection(1, intersection1);
@@ -191,6 +194,28 @@ export default class Way {
       this.buildings.push(building);
 
       // TODO: Sort buildings by distance.
+    }
+  }
+
+  getCars(): Car[] {
+    return this.cars;
+  }
+
+  addCar(car: Car): void {
+    if (car && this.cars.indexOf(car) == -1) {
+      this.cars.push(car);
+
+      // TODO: Sort cars by distance.
+    }
+  }
+
+  removeCar(car: Car): void {
+    if (car) {
+      let index: number = this.cars.indexOf(car);
+
+      if (index > -1) {
+        this.cars.splice(index, 1);
+      }
     }
   }
 
