@@ -15,7 +15,7 @@ export default class Intersection {
     this.location = location;
     this.ways = []
 
-    this.counter = 0;
+    this.counter = 1;
 
     this.carQueue = [];
   }
@@ -63,14 +63,14 @@ export default class Intersection {
   }
 
   tick(): void {
-    if (this.counter == 0) {
-      if (this.carQueue.length > 0) {
+    if (this.carQueue.length > 0) {
+      if (this.counter == 0) {
         let car: Car = this.carQueue.shift();
 
         car.advanceThroughIntersection();
       }
-    }
 
-    this.counter = (this.counter + 1) % Intersection.TICK_COUNTER;
+      this.counter = (this.counter + 1) % Intersection.TICK_COUNTER;
+    }
   }
 }
