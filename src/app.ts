@@ -14,7 +14,7 @@ canvas.height = window.innerHeight - 20;
 let world: World = WorldGenerator.generate(canvas);
 
 let graphics: WebGLGraphics = new WebGLGraphics(canvas, world);
-// let graphics: CanvasGraphics = new CanvasGraphics(canvas, 1.0);
+// let graphics: CanvasGraphics = new CanvasGraphics(canvas, 0.8);
 
 function graphicsTick() {
   graphics.draw(world);

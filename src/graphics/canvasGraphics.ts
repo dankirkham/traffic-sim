@@ -117,6 +117,8 @@ private drawBuildings(context: CanvasRenderingContext2D, buildings: Building[], 
   draw(world: World) {
     let context: CanvasRenderingContext2D = this.canvas.getContext("2d");
 
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
     let map: Map = world.getMap();
 
     this.drawWays(context, map.getWays(), this.scale);
