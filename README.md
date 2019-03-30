@@ -1,6 +1,6 @@
 # Traffic Simulator
 
-A WebGL 3D city traffic simulator written in TypeScript. See **Traffic Simulator** in action [here](http://d4n.nl/traffic-sim/).
+A WebGL 3D city traffic simulator written in TypeScript. See **Traffic Simulator** in action [here](https://dankirkham.github.io/traffic-sim/).
 
 ## About
 This is a browser-based traffic simulator. Citizens live in a procedurally generated city and commute between home and work in cars. Cars have simple rules and act as automata. The goal is to not to program the concept of 'traffic' into the simulator, but rather to watch it form naturally based on many other things, such as city population, car automaton rules, and road count/topology.
